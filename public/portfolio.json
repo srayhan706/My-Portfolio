@@ -1,0 +1,76 @@
+{
+  "about": {
+    "name": "Md Shariful Islam Rayhan",
+    "title": "Computer Science & Engineering Student",
+    "tagline": "Building systems, leading communities, and turning ideas into software.",
+    "summary": "Final-year CSE student at University of Dhaka with hands-on experience in backend development, system programming, and building scalable applications. President of CSEDU Students' Club, leading 200+ members and organizing hackathons and AI competitions."
+  },
+  "contact": {
+    "email": "srayhan706@gmail.com",
+    "phone": "+880 1778 956611",
+    "github": "https://github.com/srayhan706",
+    "linkedin": "https://linkedin.com/in/srayhan"
+  },
+  "education": {
+    "degree": "Bachelor of Science in Computer Science and Engineering",
+    "institution": "University of Dhaka",
+    "period": "Jan 2022 – Dec 2025 (Expected)",
+    "gpa": "3.39/4.00",
+    "note": "through 7th Semester"
+  },
+  "skills": {
+    "languages": ["C", "C++", "Java", "Python", "Assembly (ARM)"],
+    "frameworks": ["FastAPI", "Flask", "JavaFX", "SDL2"],
+    "concepts": [
+      "Data Structures & Algorithms",
+      "OOP",
+      "REST APIs",
+      "Database Design",
+      "System Programming"
+    ],
+    "tools": ["Git", "GitHub", "VS Code", "Linux"]
+  },
+  "projects": [
+    {
+      "title": "Physics Mechanical Calculator",
+      "description": "Interactive calculator using SDL framework for physics and mechanical engineering problems. Implements animations to visualize engineering concepts alongside computational logic.",
+      "tech": ["C/C++", "SDL2"],
+      "github": "https://github.com/srayhan706"
+    },
+    {
+      "title": "Bookly – Android App",
+      "description": "Android application for buying books with user rating system, search functionality, and contact modules.",
+      "tech": ["Java", "Android"],
+      "github": "https://github.com/srayhan706"
+    },
+    {
+      "title": "Marketplace Web Application",
+      "description": "Flask-based backend handling business logic and REST APIs. Applied modular architecture for maintainability and scalability.",
+      "tech": ["Python", "Flask", "REST API"],
+      "github": "https://github.com/srayhan706"
+    },
+    {
+      "title": "Hospital Management System",
+      "description": "Terminal-based database system using MySQL. Uses indexing, triggers, stored procedures, and views for optimized performance. Implements patient records, appointments, and administrative modules.",
+      "tech": ["MySQL", "C/Java", "Database Design"],
+      "github": "https://github.com/srayhan706"
+    },
+    {
+      "title": "NetConnect – Terminal Group Chat",
+      "description": "Terminal-based group chat for multiple concurrent users. Implements group creation, member management, approval-based joining, and efficient networking protocols for real-time communication.",
+      "tech": ["C/C++", "Sockets", "Networking"],
+      "github": "https://github.com/srayhan706"
+    }
+  ],
+  "leadership": {
+    "role": "President",
+    "organization": "CSEDU Students' Club (CSEDUSC)",
+    "period": "2024–2025",
+    "highlights": [
+      "Led a 200+ member organization; coordinated seminars, workshops, and cultural activities.",
+      "Organized and led Code Samurai Hackathon with nearly 50 teams, in collaboration with CSEDU and leading Japanese software companies.",
+      "Led VisionX-2025, an AI-based competition hosted by CSEDU.",
+      "Facilitated technical workshops, seminars, and cultural events to enhance student engagement and learning."
+    ]
+  }
+}
