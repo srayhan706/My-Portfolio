@@ -3,8 +3,9 @@ export default function Nav() {
     { href: '#about', label: 'About' },
     { href: '#skills', label: 'Skills' },
     { href: '#projects', label: 'Projects' },
+    { href: '#research', label: 'Research' },
     { href: '#education', label: 'Education' },
-    { href: '#leadership', label: 'Leadership' },
+    { href: '#competitive-programming', label: 'CP' },
     { href: '#contact', label: 'Contact' },
   ]
   return (

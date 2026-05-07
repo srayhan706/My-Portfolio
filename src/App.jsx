@@ -3,8 +3,9 @@ import Nav from './components/Nav'
 import Hero from './components/Hero'
 import Skills from './components/Skills'
 import Projects from './components/Projects'
+import Research from './components/Research'
 import Education from './components/Education'
-import Leadership from './components/Leadership'
+import CompetitiveProgramming from './components/CompetitiveProgramming'
 import Contact from './components/Contact'
 import Footer from './components/Footer'
 
@@ -51,8 +52,9 @@ export default function App() {
       <Hero about={data?.about} />
       <Skills skills={data?.skills} />
       <Projects projects={data?.projects} />
+      <Research research={data?.research} />
       <Education education={data?.education} />
-      <Leadership leadership={data?.leadership} />
+      <CompetitiveProgramming competitiveProgramming={data?.competitive_programming} />
       <Contact contact={data?.contact} />
       <Footer />
     </>

@@ -17,6 +17,16 @@ export default function Projects({ projects }) {
                     {p.title}
                   </h3>
                   <p className="text-slate-400 mt-2 text-sm leading-relaxed">{p.description}</p>
+                  {p.highlights?.length > 0 && (
+                    <ul className="mt-4 space-y-2">
+                      {p.highlights.map((highlight) => (
+                        <li key={highlight} className="flex gap-3 text-slate-400 text-sm">
+                          <span className="text-cyan-400 mt-1">▹</span>
+                          <span>{highlight}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
                   <div className="flex flex-wrap gap-2 mt-4">
                     {p.tech?.map((t) => (
                       <span

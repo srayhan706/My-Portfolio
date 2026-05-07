@@ -5,7 +5,9 @@ export default function Contact({ contact }) {
     { href: `tel:${contact.phone.replace(/\s/g, '')}`, label: contact.phone, icon: '📞' },
     { href: contact.github, label: 'GitHub', icon: '⌘' },
     { href: contact.linkedin, label: 'LinkedIn', icon: 'in' },
-  ]
+    { href: contact.leetcode, label: 'LeetCode', icon: '</>' },
+    { href: contact.codeforces, label: 'Codeforces', icon: '{}' },
+  ].filter(({ href }) => Boolean(href))
   return (
     <section id="contact" className="py-24 px-6">
       <div className="max-w-4xl mx-auto text-center">

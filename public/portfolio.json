@@ -1,76 +1,158 @@
 {
-  "about": {
-    "name": "Md Shariful Islam Rayhan",
-    "title": "Computer Science & Engineering Student",
-    "tagline": "Building systems, leading communities, and turning ideas into software.",
-    "summary": "Final-year CSE student at University of Dhaka with hands-on experience in backend development, system programming, and building scalable applications. President of CSEDU Students' Club, leading 200+ members and organizing hackathons and AI competitions."
+ "about": {
+  "name": "Sharif Rayhan",
+  "title": "Full Stack Developer & ML Research Enthusiast",
+  "tagline": "Crafting scalable web applications with NextJS & FastAPI while exploring the future of AI and multimodal systems.",
+  "summary": "Computer Science & Engineering graduate from the University of Dhaka with a strong focus on full stack web development using React, Next.js, FastAPI, and modern backend architectures. Passionate about building clean, scalable, and high-performance applications that solve real-world problems. Alongside software engineering, deeply interested in machine learning research, particularly multimodal large language models and video understanding systems, aligned with ongoing thesis work on long-video question answering. Currently seeking entry-level software engineering opportunities where I can contribute, learn, and grow as a full stack developer and AI-focused engineer."
   },
   "contact": {
     "email": "srayhan706@gmail.com",
-    "phone": "+880 1778 956611",
+    "phone": "+8801778956611",
     "github": "https://github.com/srayhan706",
-    "linkedin": "https://linkedin.com/in/srayhan"
+    "linkedin": "https://www.linkedin.com/in/srayhan/",
+    "leetcode": "https://leetcode.com/u/rayhansharif/",
+    "codeforces": "https://codeforces.com/profile/sharifrayhan"
   },
-  "education": {
-    "degree": "Bachelor of Science in Computer Science and Engineering",
-    "institution": "University of Dhaka",
-    "period": "Jan 2022 – Dec 2025 (Expected)",
-    "gpa": "3.39/4.00",
-    "note": "through 7th Semester"
-  },
+  "education": [
+    {
+      "degree": "Bachelor of Science in Computer Science and Engineering",
+      "institution": "University of Dhaka",
+      "location": "Dhaka, Bangladesh",
+      "period": "Jan 2022 - Jan 2026",
+      "cgpa": "3.39/4.00"
+    },
+    {
+      "degree": "Higher Secondary Certificate (HSC)",
+      "institution": "Notre Dame College",
+      "location": "Dhaka, Bangladesh",
+      "period": "July 2018 - July 2020"
+    }
+  ],
   "skills": {
-    "languages": ["C", "C++", "Java", "Python", "Assembly (ARM)"],
-    "frameworks": ["FastAPI", "Flask", "JavaFX", "SDL2"],
-    "concepts": [
-      "Data Structures & Algorithms",
-      "OOP",
-      "REST APIs",
-      "Database Design",
-      "System Programming"
+    "languages": [
+      "Python",
+      "C",
+      "C++",
+      "C#",
+      "Java",
+      "JavaScript",
+      "SQL"
     ],
-    "tools": ["Git", "GitHub", "VS Code", "Linux"]
+    "frameworks": [
+      "FastAPI",
+      "Next.js",
+      "React",
+      "Flask",
+      "Android"
+    ],
+    "libraries_ml": [
+      "Pandas",
+      "NumPy",
+      "Scikit-learn",
+      "Data Mining"
+    ],
+    "tools": [
+      "Docker",
+      "Git",
+      "Bash",
+      "LaTeX"
+    ],
+    "platforms": [
+      "Linux",
+      "Web",
+      "Windows"
+    ]
+  },
+  "competitive_programming": {
+    "leetcode": {
+      "username": "sharifrayhan",
+      "profile": "https://leetcode.com/u/sharifrayhan/",
+      "max_rating": 1814
+    },
+    "codeforces": {
+      "username": "sharifrayhan",
+      "profile": "https://codeforces.com/profile/sharifrayhan",
+      
+      "max_rating": 1037
+    }
   },
   "projects": [
     {
-      "title": "Physics Mechanical Calculator",
-      "description": "Interactive calculator using SDL framework for physics and mechanical engineering problems. Implements animations to visualize engineering concepts alongside computational logic.",
-      "tech": ["C/C++", "SDL2"],
-      "github": "https://github.com/srayhan706"
-    },
-    {
-      "title": "Bookly – Android App",
-      "description": "Android application for buying books with user rating system, search functionality, and contact modules.",
-      "tech": ["Java", "Android"],
+      "title": "CSEDU Department Website",
+      "description": "Collaborative project to develop the official website of the University of Dhaka CSE department featuring academic resources, announcements, meetings, and event management.",
+      "highlights": [
+        "Designed and implemented REST APIs for meetings, events, and announcements modules.",
+        "Developed frontend pages and integrated them with backend APIs.",
+        "Built scalable backend services using FastAPI and Next.js."
+      ],
+      "tech": [
+        "Python",
+        "FastAPI",
+        "JavaScript",
+        "Next.js"
+      ],
       "github": "https://github.com/srayhan706"
     },
     {
       "title": "Marketplace Web Application",
-      "description": "Flask-based backend handling business logic and REST APIs. Applied modular architecture for maintainability and scalability.",
-      "tech": ["Python", "Flask", "REST API"],
+      "description": "Flask-based backend system with modular architecture and REST APIs for scalable marketplace operations.",
+      "highlights": [
+        "Designed and implemented RESTful APIs for marketplace functionalities.",
+        "Applied modular backend architecture for scalability and maintainability.",
+        "Handled data processing and routing for efficient client-server communication."
+      ],
+      "tech": [
+        "Python",
+        "Flask",
+        "JavaScript",
+        "Next.js",
+        "REST API"
+      ],
       "github": "https://github.com/srayhan706"
     },
     {
-      "title": "Hospital Management System",
-      "description": "Terminal-based database system using MySQL. Uses indexing, triggers, stored procedures, and views for optimized performance. Implements patient records, appointments, and administrative modules.",
-      "tech": ["MySQL", "C/Java", "Database Design"],
+      "title": "Bookly - Android Application",
+      "description": "Android application for online book purchasing with search, ratings, and contact functionalities.",
+      "highlights": [
+        "Developed UI screens for browsing and searching books.",
+        "Implemented user rating and feedback functionality.",
+        "Integrated navigation and contact modules for improved usability."
+      ],
+      "tech": [
+        "Java",
+        "Android SDK"
+      ],
       "github": "https://github.com/srayhan706"
     },
     {
-      "title": "NetConnect – Terminal Group Chat",
-      "description": "Terminal-based group chat for multiple concurrent users. Implements group creation, member management, approval-based joining, and efficient networking protocols for real-time communication.",
-      "tech": ["C/C++", "Sockets", "Networking"],
+      "title": "NetConnect - Terminal-Based Group Chat System",
+      "description": "Multi-user real-time terminal chat application with custom networking protocol and access-controlled group communication.",
+      "highlights": [
+        "Implemented real-time multi-user messaging using socket programming.",
+        "Designed group creation and approval-based access control.",
+        "Developed a custom protocol for efficient communication."
+      ],
+      "tech": [
+        "Python",
+        "Socket Programming",
+        "Networking"
+      ],
       "github": "https://github.com/srayhan706"
     }
   ],
-  "leadership": {
-    "role": "President",
-    "organization": "CSEDU Students' Club (CSEDUSC)",
-    "period": "2024–2025",
+  "research": {
+    "title": "CATS: Curvature-Adaptive Temporal Suppression for Long-Video Question Answering",
+    "description": "A novel budget-aware frame selection method for multimodal large language models addressing inefficiencies in long-video question answering caused by suboptimal frame sampling.",
     "highlights": [
-      "Led a 200+ member organization; coordinated seminars, workshops, and cultural activities.",
-      "Organized and led Code Samurai Hackathon with nearly 50 teams, in collaboration with CSEDU and leading Japanese software companies.",
-      "Led VisionX-2025, an AI-based competition hosted by CSEDU.",
-      "Facilitated technical workshops, seminars, and cultural events to enhance student engagement and learning."
+      "Introduces curvature-adaptive temporal suppression to reduce redundant frames.",
+      "Preserves short-term salient events and long-range contextual information.",
+      "Improves efficiency for multimodal LLM-based long-video QA systems."
+    ],
+    "domain": [
+      "Machine Learning",
+      "Computer Vision",
+      "Multimodal LLMs",
+      "Video Understanding"
     ]
   }
 }
