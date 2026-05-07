@@ -49,7 +49,7 @@ export default function App() {
   return (
     <>
       <Nav />
-      <Hero about={data?.about} />
+      <Hero about={data?.about} contact={data?.contact} />
       <Skills skills={data?.skills} />
       <Projects projects={data?.projects} />
       <Research research={data?.research} />

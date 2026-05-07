@@ -1,4 +1,4 @@
-export default function Hero({ about }) {
+export default function Hero({ about, contact }) {
   if (!about) return null
 
   return (
@@ -23,6 +23,16 @@ export default function Hero({ about }) {
             >
               View projects
             </a>
+            {contact?.resume && (
+              <a
+                href={contact.resume}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-6 py-3 rounded-lg text-slate-300 border border-slate-600 hover:border-emerald-500/50 hover:text-emerald-400 transition"
+              >
+                View CV
+              </a>
+            )}
             <a
               href="#contact"
               className="px-6 py-3 rounded-lg text-slate-300 border border-slate-600 hover:border-cyan-500/50 hover:text-cyan-400 transition"

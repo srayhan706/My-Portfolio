@@ -7,6 +7,7 @@ export default function Contact({ contact }) {
     { href: contact.linkedin, label: 'LinkedIn', icon: 'in' },
     { href: contact.leetcode, label: 'LeetCode', icon: '</>' },
     { href: contact.codeforces, label: 'Codeforces', icon: '{}' },
+    { href: contact.resume, label: 'Resume', icon: 'CV' },
   ].filter(({ href }) => Boolean(href))
   return (
     <section id="contact" className="py-24 px-6">
@@ -18,8 +19,8 @@ export default function Contact({ contact }) {
             <a
               key={label}
               href={href}
-              target={href.startsWith('http') ? '_blank' : undefined}
-              rel={href.startsWith('http') ? 'noopener noreferrer' : undefined}
+              target={href.startsWith('http') || href.endsWith('.pdf') ? '_blank' : undefined}
+              rel={href.startsWith('http') || href.endsWith('.pdf') ? 'noopener noreferrer' : undefined}
               className="inline-flex items-center gap-2 px-5 py-3 rounded-lg border border-slate-700 text-slate-300 hover:border-emerald-500/50 hover:text-emerald-400 transition"
             >
               <span className="text-cyan-400 font-mono text-sm">{icon}</span>
