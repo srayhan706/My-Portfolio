@@ -1,30 +1,35 @@
+import SectionHeading from './ui/SectionHeading'
+
 export default function Research({ research }) {
   if (!research) return null
 
   return (
-    <section id="research" className="py-24 px-6">
-      <div className="max-w-4xl mx-auto">
-        <h2 className="text-2xl font-bold text-white mb-2">Research</h2>
-        <p className="text-slate-500 mb-12">Current thesis and research direction</p>
-        <article className="rounded-xl border border-slate-800 bg-slate-900/50 p-6 md:p-8">
-          <h3 className="text-lg font-semibold text-white">{research.title}</h3>
-          <p className="text-slate-400 mt-3 leading-relaxed">{research.description}</p>
+    <section id="research" className="section-shell border-t border-[var(--color-border)]">
+      <div className="section-inner">
+        <SectionHeading
+          eyebrow="Research"
+          title="Thesis direction"
+          description="Additional depth in machine learning and video understanding."
+        />
+        <article className="glass-panel rounded-2xl p-6 md:p-8">
+          <h3 className="font-display text-xl md:text-2xl text-white leading-snug">{research.title}</h3>
+          <p className="text-[var(--color-muted)] mt-4 leading-relaxed">{research.description}</p>
           {research.highlights?.length > 0 && (
-            <ul className="mt-6 space-y-3">
+            <ul className="mt-6 space-y-2.5">
               {research.highlights.map((highlight) => (
-                <li key={highlight} className="flex gap-3 text-slate-400">
-                  <span className="text-emerald-400 mt-1">▹</span>
+                <li key={highlight} className="flex gap-3 text-sm text-[#c8c8d0] leading-relaxed">
+                  <span className="mt-2 h-1 w-1 shrink-0 rounded-full bg-[var(--color-teal)]" />
                   <span>{highlight}</span>
                 </li>
               ))}
             </ul>
           )}
           {research.domain?.length > 0 && (
-            <div className="flex flex-wrap gap-2 mt-6">
+            <div className="flex flex-wrap gap-2 mt-6 pt-6 border-t border-[var(--color-border)]">
               {research.domain.map((item) => (
                 <span
                   key={item}
-                  className="px-3 py-1 rounded-md border border-cyan-500/30 bg-cyan-500/10 text-cyan-400 text-sm"
+                  className="px-3 py-1 rounded-full border border-[var(--color-border)] text-xs text-[var(--color-muted)]"
                 >
                   {item}
                 </span>

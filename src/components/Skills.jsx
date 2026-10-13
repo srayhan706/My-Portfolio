@@ -1,35 +1,36 @@
+import SectionHeading from './ui/SectionHeading'
+
 export default function Skills({ skills }) {
   if (!skills) return null
+
   const groups = [
-    { title: 'Languages', items: skills.languages, color: 'emerald' },
-    { title: 'Frameworks', items: skills.frameworks, color: 'cyan' },
-    { title: 'Libraries & ML', items: skills.libraries_ml || skills.concepts, color: 'amber' },
-    { title: 'Tools', items: skills.tools, color: 'violet' },
-    { title: 'Platforms', items: skills.platforms, color: 'sky' },
+    { title: 'Programming Languages', items: skills.programming_languages || skills.languages },
+    { title: 'Scripting & Automation', items: skills.scripting_automation },
+    { title: 'Frontend Development', items: skills.frontend },
+    { title: 'Backend Development', items: skills.backend || skills.frameworks },
+    { title: 'Databases', items: skills.databases },
+    { title: 'DevOps & Deployment', items: skills.devops || skills.platforms },
+    { title: 'Tools & Version Control', items: skills.tools },
+    { title: 'Libraries & ML', items: skills.libraries_ml || skills.concepts },
   ].filter(({ items }) => items?.length)
 
-  const colorMap = {
-    emerald: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30',
-    cyan: 'bg-cyan-500/10 text-cyan-400 border-cyan-500/30',
-    amber: 'bg-amber-500/10 text-amber-400 border-amber-500/30',
-    violet: 'bg-violet-500/10 text-violet-400 border-violet-500/30',
-    sky: 'bg-sky-500/10 text-sky-400 border-sky-500/30',
-  }
-
   return (
-    <section id="skills" className="py-24 px-6">
-      <div className="max-w-4xl mx-auto">
-        <h2 className="text-2xl font-bold text-white mb-2">Skills</h2>
-        <p className="text-slate-500 mb-12">Technologies and domains I work with</p>
-        <div className="grid sm:grid-cols-2 gap-8">
-          {groups.map(({ title, items, color }) => (
-            <div key={title} className="rounded-xl border border-slate-800 bg-slate-900/50 p-6">
-              <h3 className="text-slate-300 font-medium mb-4">{title}</h3>
+    <section id="skills" className="section-shell border-t border-[var(--color-border)] bg-[var(--color-ink-elevated)]/40">
+      <div className="section-inner">
+        <SectionHeading
+          eyebrow="Skills"
+          title="Technical toolkit"
+          description="A quick scan of stacks I use day to day—grouped the way hiring teams evaluate fit."
+        />
+        <div className="grid sm:grid-cols-2 gap-4">
+          {groups.map(({ title, items }) => (
+            <div key={title} className="glass-panel rounded-2xl p-5 md:p-6">
+              <h3 className="text-sm font-semibold text-white mb-4">{title}</h3>
               <div className="flex flex-wrap gap-2">
                 {items.map((s) => (
                   <span
                     key={s}
-                    className={`px-3 py-1 rounded-md border text-sm ${colorMap[color]}`}
+                    className="px-3 py-1.5 rounded-full border border-[var(--color-border)] bg-white/[0.02] text-xs text-[#d6d6de] hover:border-[var(--color-accent)]/30 hover:text-white transition-colors"
                   >
                     {s}
                   </span>

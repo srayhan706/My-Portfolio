@@ -1,51 +1,110 @@
+import SectionHeading from './ui/SectionHeading'
+
 export default function Projects({ projects }) {
   if (!projects?.length) return null
+
+  const [featured, ...rest] = projects
+
   return (
-    <section id="projects" className="py-24 px-6">
-      <div className="max-w-4xl mx-auto">
-        <h2 className="text-2xl font-bold text-white mb-2">Projects</h2>
-        <p className="text-slate-500 mb-12">Things I&apos;ve built</p>
-        <div className="space-y-6">
-          {projects.map((p, i) => (
-            <article
-              key={p.title}
-              className="group rounded-xl border border-slate-800 bg-slate-900/50 p-6 hover:border-emerald-500/30 transition"
-            >
-              <div className="flex flex-wrap items-start justify-between gap-4">
-                <div>
-                  <h3 className="text-lg font-semibold text-white group-hover:text-emerald-400 transition">
-                    {p.title}
-                  </h3>
-                  <p className="text-slate-400 mt-2 text-sm leading-relaxed">{p.description}</p>
-                  {p.highlights?.length > 0 && (
-                    <ul className="mt-4 space-y-2">
-                      {p.highlights.map((highlight) => (
-                        <li key={highlight} className="flex gap-3 text-slate-400 text-sm">
-                          <span className="text-cyan-400 mt-1">▹</span>
-                          <span>{highlight}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  )}
-                  <div className="flex flex-wrap gap-2 mt-4">
-                    {p.tech?.map((t) => (
-                      <span
-                        key={t}
-                        className="px-2 py-0.5 rounded bg-slate-800 text-slate-400 text-xs font-mono"
-                      >
-                        {t}
-                      </span>
+    <section id="projects" className="section-shell border-t border-[var(--color-border)]">
+      <div className="section-inner">
+        <SectionHeading
+          eyebrow="Projects"
+          title="Proof of work"
+          description="Selected builds that show backend depth, frontend polish, and real-world problem solving."
+        />
+
+        {featured && (
+          <article className="glass-panel rounded-3xl p-6 md:p-8 mb-6 relative overflow-hidden group">
+            <div
+              className="pointer-events-none absolute -right-16 -top-16 h-56 w-56 rounded-full bg-[var(--color-accent-soft)] blur-3xl"
+              aria-hidden
+            />
+            <div className="relative flex flex-col lg:flex-row lg:items-start lg:justify-between gap-6">
+              <div className="max-w-2xl">
+                <p className="text-[11px] uppercase tracking-[0.2em] text-[var(--color-teal)] mb-3">
+                  Featured project
+                </p>
+                <h3 className="font-display text-2xl md:text-3xl text-white group-hover:text-[#f5ead4] transition-colors">
+                  {featured.title}
+                </h3>
+                <p className="mt-3 text-[var(--color-muted)] leading-relaxed">{featured.description}</p>
+                {featured.highlights?.length > 0 && (
+                  <ul className="mt-5 space-y-2.5">
+                    {featured.highlights.map((highlight) => (
+                      <li key={highlight} className="flex gap-3 text-sm text-[#c8c8d0] leading-relaxed">
+                        <span className="mt-2 h-1 w-1 shrink-0 rounded-full bg-[var(--color-teal)]" />
+                        <span>{highlight}</span>
+                      </li>
                     ))}
-                  </div>
+                  </ul>
+                )}
+                <div className="flex flex-wrap gap-2 mt-6">
+                  {featured.tech?.map((t) => (
+                    <span
+                      key={t}
+                      className="px-2.5 py-1 rounded-md border border-[var(--color-border)] bg-black/20 text-[11px] font-mono text-[var(--color-muted)]"
+                    >
+                      {t}
+                    </span>
+                  ))}
                 </div>
+              </div>
+              {featured.github && (
                 <a
-                  href={p.github}
+                  href={featured.github}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="shrink-0 px-4 py-2 rounded-lg border border-slate-600 text-slate-400 hover:border-cyan-500/50 hover:text-cyan-400 transition text-sm"
+                  className="shrink-0 inline-flex items-center justify-center rounded-full border border-[var(--color-border-strong)] bg-white/[0.04] px-5 py-3 text-sm font-medium text-white hover:border-[var(--color-accent)]/40 hover:text-[#f5ead4] transition"
                 >
-                  GitHub →
+                  View repository
                 </a>
+              )}
+            </div>
+          </article>
+        )}
+
+        <div className="grid gap-4 md:grid-cols-2">
+          {rest.map((p, i) => (
+            <article
+              key={p.title}
+              className="glass-panel rounded-2xl p-6 flex flex-col h-full hover:border-[var(--color-border-strong)] transition-colors"
+            >
+              <p className="text-[11px] font-mono text-[var(--color-muted)] mb-2">
+                {String(i + 2).padStart(2, '0')}
+              </p>
+              <h3 className="text-lg font-semibold text-white">{p.title}</h3>
+              <p className="text-sm text-[var(--color-muted)] mt-2 leading-relaxed flex-1">{p.description}</p>
+              {p.highlights?.length > 0 && (
+                <ul className="mt-4 space-y-2">
+                  {p.highlights.slice(0, 2).map((highlight) => (
+                    <li key={highlight} className="text-xs text-[#b8b8c2] leading-relaxed line-clamp-2">
+                      · {highlight}
+                    </li>
+                  ))}
+                </ul>
+              )}
+              <div className="mt-5 flex flex-wrap items-center justify-between gap-3">
+                <div className="flex flex-wrap gap-1.5">
+                  {p.tech?.slice(0, 4).map((t) => (
+                    <span
+                      key={t}
+                      className="px-2 py-0.5 rounded border border-[var(--color-border)] text-[10px] font-mono text-[var(--color-muted)]"
+                    >
+                      {t}
+                    </span>
+                  ))}
+                </div>
+                {p.github && (
+                  <a
+                    href={p.github}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-xs font-medium text-[var(--color-accent)] hover:text-white transition-colors"
+                  >
+                    GitHub →
+                  </a>
+                )}
               </div>
             </article>
           ))}

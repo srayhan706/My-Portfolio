@@ -1,28 +1,40 @@
+import SectionHeading from './ui/SectionHeading'
+
 export default function Education({ education }) {
   const entries = Array.isArray(education) ? education : education ? [education] : []
   if (!entries.length) return null
 
   return (
-    <section id="education" className="py-24 px-6">
-      <div className="max-w-4xl mx-auto">
-        <h2 className="text-2xl font-bold text-white mb-2">Education</h2>
-        <p className="text-slate-500 mb-12">Academic background</p>
-        <div className="space-y-6">
+    <section id="education" className="section-shell border-t border-[var(--color-border)]">
+      <div className="section-inner">
+        <SectionHeading
+          eyebrow="Education"
+          title="Academic foundation"
+          description="Formal training in computer science and engineering."
+        />
+        <div className="space-y-4">
           {entries.map((entry) => (
             <div
               key={`${entry.degree}-${entry.institution}`}
-              className="rounded-xl border border-slate-800 bg-slate-900/50 p-6 md:p-8"
+              className="glass-panel rounded-2xl p-6 md:p-7 flex flex-col md:flex-row md:items-center md:justify-between gap-4"
             >
-              <h3 className="text-lg font-semibold text-white">{entry.degree}</h3>
-              <p className="text-emerald-400 mt-1">{entry.institution}</p>
-              {entry.location && <p className="text-slate-500 text-sm mt-1">{entry.location}</p>}
-              <p className="text-slate-500 text-sm mt-2">{entry.period}</p>
-              {(entry.cgpa || entry.gpa) && (
-                <p className="text-slate-400 mt-2">
-                  CGPA: <span className="text-cyan-400 font-mono">{entry.cgpa || entry.gpa}</span>
-                  {entry.note && <span className="text-slate-500 text-sm"> ({entry.note})</span>}
-                </p>
-              )}
+              <div>
+                <h3 className="text-lg font-semibold text-white">{entry.degree}</h3>
+                <p className="text-[var(--color-accent)] mt-1">{entry.institution}</p>
+                {entry.location && (
+                  <p className="text-sm text-[var(--color-muted)] mt-1">{entry.location}</p>
+                )}
+              </div>
+              <div className="md:text-right">
+                <p className="text-xs font-mono text-[var(--color-muted)]">{entry.period}</p>
+                {(entry.cgpa || entry.gpa) && (
+                  <p className="mt-2 text-sm text-[#d0d0d8]">
+                    CGPA{' '}
+                    <span className="font-mono text-[var(--color-teal)]">{entry.cgpa || entry.gpa}</span>
+                    {entry.note && <span className="text-[var(--color-muted)]"> ({entry.note})</span>}
+                  </p>
+                )}
+              </div>
             </div>
           ))}
         </div>

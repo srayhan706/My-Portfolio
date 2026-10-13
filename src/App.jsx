@@ -1,18 +1,28 @@
 import { useState, useEffect } from 'react'
 import Nav from './components/Nav'
+import ScrollProgress from './components/ScrollProgress'
 import Hero from './components/Hero'
 import Skills from './components/Skills'
 import Projects from './components/Projects'
 import Research from './components/Research'
 import Education from './components/Education'
+import Experience from './components/Experience'
 import CompetitiveProgramming from './components/CompetitiveProgramming'
 import Contact from './components/Contact'
 import Footer from './components/Footer'
 
-// Use FastAPI when VITE_API_URL is set (e.g. production with backend); otherwise static JSON
 const portfolioUrl = import.meta.env.VITE_API_URL
   ? `${import.meta.env.VITE_API_URL.replace(/\/$/, '')}/portfolio`
   : '/portfolio.json'
+
+function LoadingScreen() {
+  return (
+    <div className="min-h-screen flex flex-col items-center justify-center gap-4 px-6">
+      <div className="h-10 w-10 rounded-full border-2 border-[var(--color-border)] border-t-[var(--color-accent)] animate-spin" />
+      <p className="text-sm text-[var(--color-muted)]">Loading portfolio…</p>
+    </div>
+  )
+}
 
 export default function App() {
   const [data, setData] = useState(null)
@@ -30,33 +40,31 @@ export default function App() {
       .finally(() => setLoading(false))
   }, [])
 
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <p className="text-slate-500">Loading…</p>
-      </div>
-    )
-  }
+  if (loading) return <LoadingScreen />
 
   if (error) {
     return (
       <div className="min-h-screen flex items-center justify-center px-6">
-        <p className="text-amber-400">Could not load portfolio.</p>
+        <p className="text-[var(--color-accent)]">Could not load portfolio. Please refresh.</p>
       </div>
     )
   }
 
   return (
     <>
-      <Nav />
-      <Hero about={data?.about} contact={data?.contact} />
-      <Skills skills={data?.skills} />
-      <Projects projects={data?.projects} />
-      <Research research={data?.research} />
-      <Education education={data?.education} />
-      <CompetitiveProgramming competitiveProgramming={data?.competitive_programming} />
-      <Contact contact={data?.contact} />
-      <Footer />
+      <ScrollProgress />
+      <Nav resumeHref={data?.contact?.resume} />
+      <main>
+        <Hero about={data?.about} contact={data?.contact} experience={data?.experience} />
+        <Experience experience={data?.experience} />
+        <Projects projects={data?.projects} />
+        <Skills skills={data?.skills} />
+        <Education education={data?.education} />
+        <Research research={data?.research} />
+        <CompetitiveProgramming competitiveProgramming={data?.competitive_programming} />
+        <Contact contact={data?.contact} />
+      </main>
+      <Footer contact={data?.contact} />
     </>
   )
 }

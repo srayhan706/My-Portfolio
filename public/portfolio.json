@@ -1,67 +1,77 @@
 {
- "about": {
-  "name": "Sharif Rayhan",
-  "title": "Full Stack Developer & ML Research Enthusiast",
-  "tagline": "Crafting scalable web applications with NextJS & FastAPI while exploring the future of AI and multimodal systems.",
-  "summary": "Computer Science & Engineering graduate from the University of Dhaka with a strong focus on full stack web development using React, Next.js, FastAPI, and modern backend architectures. Passionate about building clean, scalable, and high-performance applications that solve real-world problems. Alongside software engineering, deeply interested in machine learning research, particularly multimodal large language models and video understanding systems, aligned with ongoing thesis work on long-video question answering. Currently seeking entry-level software engineering opportunities where I can contribute, learn, and grow as a full stack developer and AI-focused engineer."
+  "about": {
+    "name": "Md Shariful Islam Rayhan",
+    "title": "Junior Software Engineer",
+    "tagline": "Full-stack developer building scalable web applications with Spring Boot, FastAPI, React, and Next.js.",
+    "summary": "B.Sc. in Computer Science & Engineering from the University of Dhaka (CGPA 3.39/4). Currently working as a Junior Software Engineer at Dynamic Solution Innovators (DSi) in Dhaka. Experienced in REST API design, secure authentication (JWT, OAuth 2.0), modular backend architecture, and deploying services with Docker, Linux, and CI/CD."
   },
   "contact": {
     "email": "srayhan706@gmail.com",
     "phone": "+8801778956611",
     "github": "https://github.com/srayhan706",
-    "linkedin": "https://www.linkedin.com/in/srayhan/",
+    "linkedin": "https://www.linkedin.com/in/srayhan",
     "leetcode": "https://leetcode.com/u/rayhansharif/",
     "codeforces": "https://codeforces.com/profile/sharifrayhan",
     "resume": "/mdsharifulisalmrayhan.pdf"
   },
+  "experience": [
+    {
+      "role": "Junior Software Engineer",
+      "organization": "Dynamic Solution Innovators (DSi)",
+      "location": "Dhaka, Bangladesh",
+      "period": "July 2026 – Present"
+    }
+  ],
   "education": [
     {
-      "degree": "Bachelor of Science in Computer Science and Engineering",
+      "degree": "B.Sc. in Computer Science and Engineering",
       "institution": "University of Dhaka",
       "location": "Dhaka, Bangladesh",
       "period": "Jan 2022 - Jan 2026",
-      "cgpa": "3.39/4.00"
-    },
-    {
-      "degree": "Higher Secondary Certificate (HSC)",
-      "institution": "Notre Dame College",
-      "location": "Dhaka, Bangladesh",
-      "period": "July 2018 - July 2020"
+      "cgpa": "3.39/4"
     }
   ],
   "skills": {
-    "languages": [
+    "programming_languages": [
+      "Java",
       "Python",
       "C",
       "C++",
-      "C#",
-      "Java",
       "JavaScript",
-      "SQL"
+      "SQL",
+      "Perl"
     ],
-    "frameworks": [
-      "FastAPI",
+    "scripting_automation": [
+      "Advanced Bash Scripting",
+      "Advanced Perl Scripting"
+    ],
+    "frontend": [
+      "React.js",
       "Next.js",
-      "React",
-      "Flask",
-      "Android"
+      "HTML5",
+      "CSS3"
     ],
-    "libraries_ml": [
-      "Pandas",
-      "NumPy",
-      "Scikit-learn",
-      "Data Mining"
+    "backend": [
+      "Spring Boot",
+      "FastAPI",
+      "Flask"
+    ],
+    "databases": [
+      "MySQL",
+      "PostgreSQL"
+    ],
+    "devops": [
+      "Docker",
+      "Docker Compose",
+      "Linux",
+      "VPS Deployment",
+      "DigitalOcean",
+      "CI/CD"
     ],
     "tools": [
-      "Docker",
       "Git",
-      "Bash",
+      "GitHub",
       "LaTeX"
-    ],
-    "platforms": [
-      "Linux",
-      "Web",
-      "Windows"
     ]
   },
   "competitive_programming": {
@@ -73,18 +83,37 @@
     "codeforces": {
       "username": "sharifrayhan",
       "profile": "https://codeforces.com/profile/sharifrayhan",
-      
       "max_rating": 1037
     }
   },
   "projects": [
     {
+      "title": "ToToCompany — Travel & Flight Booking Platform",
+      "description": "A full-stack travel web application for exploring global landmarks, browsing flight information, and managing user profiles with secure authentication.",
+      "highlights": [
+        "Developed REST APIs using Spring Boot and MySQL for backend services and user management.",
+        "Implemented landmark exploration with search and filtering, along with a flight search interface.",
+        "Integrated Google OAuth 2.0 authentication, JWT-based security, email OTP verification, and password recovery.",
+        "Applied Singleton, Factory, MVC, and Builder design patterns to improve code organization and maintainability."
+      ],
+      "tech": [
+        "Java",
+        "Spring Boot",
+        "Next.js",
+        "MySQL",
+        "Spring Security",
+        "JWT",
+        "OAuth 2.0",
+        "Docker"
+      ],
+      "github": "https://github.com/srayhan706/To-To-Company-Travel-Planner-"
+    },
+    {
       "title": "CSEDU Department Website",
-      "description": "Collaborative project to develop the official website of the University of Dhaka CSE department featuring academic resources, announcements, meetings, and event management.",
+      "description": "A collaborative project to develop the official website of the University of Dhaka’s CSE department, featuring user management, academic resources, announcements, and event scheduling.",
       "highlights": [
         "Designed and implemented REST APIs for meetings, events, and announcements modules.",
-        "Developed frontend pages and integrated them with backend APIs.",
-        "Built scalable backend services using FastAPI and Next.js."
+        "Developed the meetings, events, and announcements pages and integrated them with the backend APIs."
       ],
       "tech": [
         "Python",
@@ -92,53 +121,37 @@
         "JavaScript",
         "Next.js"
       ],
-      "github": "https://github.com/srayhan706"
+      "github": "https://github.com/srayhan706/CSEDU-Website"
     },
     {
       "title": "Marketplace Web Application",
-      "description": "Flask-based backend system with modular architecture and REST APIs for scalable marketplace operations.",
+      "description": "Flask-based backend system with REST APIs designed using a modular and scalable architecture for efficient data handling.",
       "highlights": [
-        "Designed and implemented RESTful APIs for marketplace functionalities.",
-        "Applied modular backend architecture for scalability and maintainability.",
-        "Handled data processing and routing for efficient client-server communication."
+        "Designed and implemented RESTful APIs for core marketplace functionalities.",
+        "Structured the backend using a modular architecture to ensure scalability and maintainability.",
+        "Handled data processing and routing efficiently for seamless client-server communication."
       ],
       "tech": [
         "Python",
         "Flask",
         "JavaScript",
-        "Next.js",
-        "REST API"
+        "Next.js"
       ],
-      "github": "https://github.com/srayhan706"
+      "github": "https://github.com/srayhan706/MarketPlace"
     },
     {
-      "title": "Bookly - Android Application",
-      "description": "Android application for online book purchasing with search, ratings, and contact functionalities.",
-      "highlights": [
-        "Developed UI screens for browsing and searching books.",
-        "Implemented user rating and feedback functionality.",
-        "Integrated navigation and contact modules for improved usability."
-      ],
-      "tech": [
-        "Java",
-        "Android SDK"
-      ],
-      "github": "https://github.com/srayhan706"
-    },
-    {
-      "title": "NetConnect - Terminal-Based Group Chat System",
-      "description": "Multi-user real-time terminal chat application with custom networking protocol and access-controlled group communication.",
+      "title": "NetConnect — Terminal-Based Group Chat System",
+      "description": "Multi-user real-time chat application with group creation, member approval, and access control using a custom networking protocol.",
       "highlights": [
         "Implemented real-time multi-user messaging using socket programming.",
-        "Designed group creation and approval-based access control.",
-        "Developed a custom protocol for efficient communication."
+        "Designed group creation and approval-based access control mechanisms.",
+        "Developed a custom communication protocol for efficient and reliable data exchange."
       ],
       "tech": [
         "Python",
-        "Socket Programming",
-        "Networking"
+        "Socket Programming"
       ],
-      "github": "https://github.com/srayhan706"
+      "github": "https://github.com/srayhan706/NetConnect"
     }
   ],
   "research": {
