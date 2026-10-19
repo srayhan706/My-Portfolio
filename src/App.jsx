@@ -1,13 +1,13 @@
 import { useState, useEffect } from 'react'
 import Nav from './components/Nav'
-import ScrollProgress from './components/ScrollProgress'
 import Hero from './components/Hero'
+import Mission from './components/Mission'
 import Skills from './components/Skills'
 import Projects from './components/Projects'
 import Research from './components/Research'
 import Experience from './components/Experience'
-import CompetitiveProgramming from './components/CompetitiveProgramming'
 import Contact from './components/Contact'
+import Connect from './components/Connect'
 import Footer from './components/Footer'
 
 const portfolioUrl = import.meta.env.VITE_API_URL
@@ -16,11 +16,11 @@ const portfolioUrl = import.meta.env.VITE_API_URL
 
 function LoadingScreen() {
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center gap-5 bg-white px-6">
-      <div className="h-1 w-40 overflow-hidden rounded-full bg-[var(--color-line)]">
-        <div className="h-full w-1/2 rounded-full bg-[var(--color-ink)] animate-[loader_1.1s_ease-in-out_infinite]" />
+    <div className="min-h-screen flex flex-col items-center justify-center gap-5 px-6">
+      <div className="h-1 w-40 overflow-hidden rounded-full bg-black/10">
+        <div className="h-full w-1/2 rounded-full bg-[var(--color-teal)] animate-[loader_1.1s_ease-in-out_infinite]" />
       </div>
-      <p className="font-mono text-xs uppercase tracking-[0.25em] text-[var(--color-muted)]">Loading</p>
+      <p className="text-xs uppercase tracking-[0.25em] text-[var(--color-muted)]">Loading</p>
     </div>
   )
 }
@@ -52,25 +52,28 @@ export default function App() {
   if (error) {
     return (
       <div className="min-h-screen flex items-center justify-center px-6">
-        <p className="font-semibold">Could not load portfolio. Please refresh.</p>
+        <p className="font-medium">Could not load portfolio. Please refresh.</p>
       </div>
     )
   }
 
-  const availability = data?.about?.availability ?? 'Open to Opportunities'
-
   return (
     <>
-      <ScrollProgress />
-      <Nav data={data} availability={availability} />
+      <Nav name={data?.about?.name} email={data?.contact?.email} />
       <main>
-        <Hero about={data?.about} contact={data?.contact} />
-        <Projects projects={data?.projects} githubHref={data?.contact?.github} />
+        <Hero about={data?.about} contact={data?.contact} experience={data?.experience} skills={data?.skills} />
+        <Mission about={data?.about} skills={data?.skills} />
         <Skills skills={data?.skills} />
-        <Experience experience={data?.experience} education={data?.education} />
+        <Projects projects={data?.projects} githubHref={data?.contact?.github} />
         <Research research={data?.research} />
-        <CompetitiveProgramming competitiveProgramming={data?.competitive_programming} />
-        <Contact contact={data?.contact} name={data?.about?.name} availability={availability} />
+        <Experience
+          experience={data?.experience}
+          education={data?.education}
+          competitiveProgramming={data?.competitive_programming}
+          resume={data?.contact?.resume}
+        />
+        <Contact contact={data?.contact} />
+        <Connect contact={data?.contact} />
       </main>
       <Footer name={data?.about?.name} contact={data?.contact} />
     </>

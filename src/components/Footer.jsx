@@ -1,27 +1,18 @@
+import { Logo } from './Nav'
+
 export default function Footer({ name, contact }) {
   const year = new Date().getFullYear()
 
   return (
-    <footer className="bg-[var(--color-ink)] px-4 py-8 text-white/55 sm:px-6">
-      <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 text-sm sm:flex-row">
-        <p>
-          © {year} {name}
-        </p>
-        <div className="flex flex-wrap items-center justify-center gap-6">
-          {contact?.resume && (
-            <a href={contact.resume} target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">
-              Résumé
-            </a>
-          )}
-          {contact?.email && (
-            <a href={`mailto:${contact.email}`} className="hover:text-white transition-colors">
-              {contact.email}
-            </a>
-          )}
-          <a href="#top" className="hover:text-white transition-colors">
-            Back to top ↑
+    <footer className="shell pb-6 pt-2">
+      <div className="flex flex-col items-center justify-between gap-4 rounded-[22px] bg-white/60 px-5 py-3 sm:flex-row">
+        <Logo name={name} muted />
+        <p className="text-sm text-[var(--color-faint)]">©{year}</p>
+        {contact?.email && (
+          <a href={`mailto:${contact.email}`} className="btn-dark !py-2.5">
+            Book a call
           </a>
-        </div>
+        )}
       </div>
     </footer>
   )

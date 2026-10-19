@@ -84,3 +84,98 @@ export function FileText({ className = '', size = 16 }) {
     </svg>
   )
 }
+
+function Stroke({ className = '', size = 16, children }) {
+  return (
+    <svg {...base} width={size} height={size} className={className} stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      {children}
+    </svg>
+  )
+}
+
+export function Server(props) {
+  return (
+    <Stroke {...props}>
+      <rect x="3" y="4" width="18" height="7" rx="2" />
+      <rect x="3" y="13" width="18" height="7" rx="2" />
+      <path d="M7 7.5h.01M7 16.5h.01M11 7.5h6M11 16.5h6" />
+    </Stroke>
+  )
+}
+
+export function Layout(props) {
+  return (
+    <Stroke {...props}>
+      <rect x="3" y="4" width="18" height="16" rx="2.5" />
+      <path d="M3 9h18M9 9v11" />
+    </Stroke>
+  )
+}
+
+export function Cloud(props) {
+  return (
+    <Stroke {...props}>
+      <path d="M7 18a4 4 0 01-.6-7.95A5.5 5.5 0 0117 8.5a4.75 4.75 0 01.5 9.5H7z" />
+    </Stroke>
+  )
+}
+
+export function Database(props) {
+  return (
+    <Stroke {...props}>
+      <ellipse cx="12" cy="6" rx="7.5" ry="3" />
+      <path d="M4.5 6v12c0 1.66 3.36 3 7.5 3s7.5-1.34 7.5-3V6M4.5 12c0 1.66 3.36 3 7.5 3s7.5-1.34 7.5-3" />
+    </Stroke>
+  )
+}
+
+export function Code(props) {
+  return (
+    <Stroke {...props}>
+      <path d="M8 8l-4 4 4 4M16 8l4 4-4 4M13.5 5l-3 14" />
+    </Stroke>
+  )
+}
+
+export function Terminal(props) {
+  return (
+    <Stroke {...props}>
+      <rect x="3" y="4" width="18" height="16" rx="2.5" />
+      <path d="M7 10l3 2.5L7 15M12.5 15H17" />
+    </Stroke>
+  )
+}
+
+export function Building(props) {
+  return (
+    <Stroke {...props}>
+      <path d="M4 21V5a1 1 0 011-1h9a1 1 0 011 1v16M15 10h4a1 1 0 011 1v10M3 21h18M8 8h3M8 12h3M8 16h3" />
+    </Stroke>
+  )
+}
+
+export function Graduation(props) {
+  return (
+    <Stroke {...props}>
+      <path d="M2.5 9.5L12 5l9.5 4.5L12 14 2.5 9.5z" />
+      <path d="M6.5 11.5v4.5c0 1.38 2.46 2.5 5.5 2.5s5.5-1.12 5.5-2.5v-4.5M21.5 9.5v5" />
+    </Stroke>
+  )
+}
+
+export function Trophy(props) {
+  return (
+    <Stroke {...props}>
+      <path d="M8 4h8v5a4 4 0 01-8 0V4zM8 6H4.5v1.5A3.5 3.5 0 008 11M16 6h3.5v1.5A3.5 3.5 0 0116 11M12 13v4M8.5 20h7M10 17h4v3h-4z" />
+    </Stroke>
+  )
+}
+
+export function MapPin(props) {
+  return (
+    <Stroke {...props}>
+      <path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0113 0c0 5.4-6.5 11-6.5 11z" />
+      <circle cx="12" cy="10" r="2.3" />
+    </Stroke>
+  )
+}

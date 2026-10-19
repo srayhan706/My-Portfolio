@@ -1,19 +1,39 @@
-import { useEffect, useState } from 'react'
-import { ArrowUpRight, Close } from './ui/Icons'
+import { useEffect, useId, useState } from 'react'
+import { splitName } from '../utils/name'
 
-export default function Nav({ data, availability }) {
-  const [open, setOpen] = useState(false)
+const links = [
+  { href: '#services', label: 'Services' },
+  { href: '#work', label: 'Work' },
+  { href: '#experience', label: 'Experience' },
+  { href: '#contact', label: 'Contact' },
+]
+
+export function Logo({ name, muted = false }) {
+  const gradientId = useId()
+  return (
+    <a href="#top" className={`flex items-center gap-2.5 ${muted ? 'text-[var(--color-faint)]' : ''}`}>
+      <svg width="30" height="30" viewBox="0 0 32 32" aria-hidden>
+        <defs>
+          <linearGradient id={gradientId} x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stopColor="currentColor" stopOpacity="0.35" />
+            <stop offset="1" stopColor="currentColor" />
+          </linearGradient>
+        </defs>
+        <path
+          d="M25.5 9.5A11 11 0 1025.5 22.5"
+          fill="none"
+          stroke={`url(#${gradientId})`}
+          strokeWidth="5.5"
+          strokeLinecap="round"
+        />
+      </svg>
+      <span className="text-[13px] font-semibold uppercase tracking-[0.06em]">{splitName(name).join(' ')}</span>
+    </a>
+  )
+}
+
+export default function Nav({ name, email }) {
   const [scrolled, setScrolled] = useState(false)
-  const [active, setActive] = useState('')
-
-  const count = (v) => (Array.isArray(v) ? v.length : v ? 1 : 0)
-  const links = [
-    { href: '#work', label: 'Work', meta: count(data?.projects) },
-    { href: '#stack', label: 'Stack', meta: Object.keys(data?.skills ?? {}).length },
-    { href: '#experience', label: 'Experience', meta: count(data?.experience) + count(data?.education) },
-    { href: '#research', label: 'Research', meta: count(data?.research) },
-    { href: '#contact', label: 'Contact' },
-  ]
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24)
@@ -22,146 +42,35 @@ export default function Nav({ data, availability }) {
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
-  useEffect(() => {
-    const sections = ['work', 'stack', 'experience', 'research', 'contact']
-      .map((id) => document.getElementById(id))
-      .filter(Boolean)
-    if (!sections.length) return undefined
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((e) => {
-          if (e.isIntersecting) setActive(`#${e.target.id}`)
-        })
-      },
-      { rootMargin: '-45% 0px -50% 0px' },
-    )
-    sections.forEach((el) => observer.observe(el))
-    return () => observer.disconnect()
-  }, [])
-
-  useEffect(() => {
-    document.body.style.overflow = open ? 'hidden' : ''
-    return () => {
-      document.body.style.overflow = ''
-    }
-  }, [open])
-
-  const close = () => setOpen(false)
-
   return (
-    <>
+    <header className="sticky top-0 z-50 pt-3 md:pt-4">
       <a
         href="#top"
         className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-full focus:bg-white focus:px-4 focus:py-2"
       >
         Skip to content
       </a>
-
-      <nav
-        className={`fixed inset-x-0 top-0 z-50 transition-all duration-500 ${
-          scrolled ? 'bg-[var(--color-paper)]/80 backdrop-blur-xl shadow-[0_1px_0_var(--color-line)]' : ''
-        }`}
-      >
-        <div
-          className={`mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 sm:px-6 transition-all duration-500 ${
-            scrolled ? 'h-16' : 'h-20 md:h-24'
+      <div className="shell">
+        <nav
+          className={`flex items-center justify-between gap-4 rounded-[22px] bg-white/90 py-2.5 pl-4 pr-2.5 backdrop-blur-xl transition-shadow duration-500 animate-rise md:pl-5 ${
+            scrolled ? 'shadow-[0_12px_32px_-18px_rgba(0,0,0,0.35)]' : ''
           }`}
         >
-          <a href="#top" className="pill !py-1.5 !text-[13px] animate-slide-down">
-            <span className="live-dot" />
-            {availability}
-          </a>
-
-          <ul className="hidden lg:flex items-center gap-10">
-            {links.map(({ href, label, meta }, i) => (
-              <li key={href} className="animate-slide-down" style={{ animationDelay: `${80 + i * 60}ms` }}>
-                <a href={href} className="group relative flex items-baseline gap-1.5 text-[15px] font-medium">
-                  <span className="relative">
-                    {label}
-                    <span
-                      className={`absolute -bottom-1 left-0 h-px bg-current transition-all duration-500 ease-out-expo ${
-                        active === href ? 'w-full' : 'w-0 group-hover:w-full'
-                      }`}
-                    />
-                  </span>
-                  {meta > 0 && (
-                    <span className="font-mono text-[11px] text-[var(--color-faint)]">[{meta}]</span>
-                  )}
+          <Logo name={name} />
+          <ul className="hidden items-center gap-8 md:flex">
+            {links.map((l) => (
+              <li key={l.href}>
+                <a href={l.href} className="text-[15px] text-[var(--color-muted)] transition-colors hover:text-[var(--color-ink)]">
+                  {l.label}
                 </a>
               </li>
             ))}
           </ul>
-
-          <div className="flex items-center gap-2 animate-slide-down" style={{ animationDelay: '420ms' }}>
-            <a href="#contact" className="btn-dark hidden sm:inline-flex !py-2.5">
-              Let&apos;s Talk
-              <ArrowUpRight className="arrow" />
-            </a>
-            <button
-              type="button"
-              className="lg:hidden inline-flex h-10 w-10 items-center justify-center rounded-full bg-[var(--color-ink)] text-white"
-              aria-expanded={open}
-              aria-controls="mobile-nav"
-              onClick={() => setOpen((v) => !v)}
-            >
-              <span className="sr-only">{open ? 'Close menu' : 'Open menu'}</span>
-              {open ? (
-                <Close size={18} />
-              ) : (
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden>
-                  <path d="M4 9h16M4 15h16" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
-                </svg>
-              )}
-            </button>
-          </div>
-        </div>
-      </nav>
-
-      <div
-        id="mobile-nav"
-        className={`lg:hidden fixed inset-0 z-40 bg-[var(--color-ink)] text-white transition-[clip-path] duration-700 ease-out-expo ${
-          open ? '[clip-path:circle(150%_at_100%_0)]' : '[clip-path:circle(0%_at_100%_0)] pointer-events-none'
-        }`}
-      >
-        <ul className="flex h-full flex-col justify-center gap-2 px-6">
-          {links.map(({ href, label, meta }, i) => (
-            <li
-              key={href}
-              className="transition-all duration-700 ease-out-expo"
-              style={{
-                opacity: open ? 1 : 0,
-                transform: open ? 'none' : 'translateY(24px)',
-                transitionDelay: open ? `${150 + i * 60}ms` : '0ms',
-              }}
-            >
-              <a
-                href={href}
-                onClick={close}
-                className="flex items-baseline gap-3 border-b border-[var(--color-line-dark)] py-4 text-4xl font-semibold uppercase tracking-tight"
-              >
-                {label}
-                {meta > 0 && <span className="font-mono text-sm text-white/40">[{meta}]</span>}
-              </a>
-            </li>
-          ))}
-          {data?.contact?.resume && (
-            <li
-              className="mt-6 transition-all duration-700"
-              style={{ opacity: open ? 1 : 0, transitionDelay: open ? '500ms' : '0ms' }}
-            >
-              <a
-                href={data.contact.resume}
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={close}
-                className="inline-flex items-center gap-2 rounded-full bg-white px-5 py-3 text-sm font-semibold text-[var(--color-ink)]"
-              >
-                Download CV <ArrowUpRight />
-              </a>
-            </li>
-          )}
-        </ul>
+          <a href={email ? `mailto:${email}` : '#contact'} className="btn-dark !py-2.5">
+            Book a call
+          </a>
+        </nav>
       </div>
-    </>
+    </header>
   )
 }

@@ -1,85 +1,74 @@
+import { useState } from 'react'
 import { useScrollReveal } from '../hooks/useScrollReveal'
-import FillText from './ui/FillText'
-import { ArrowUpRight, GitHub, LeetCode, LinkedIn, Mail } from './ui/Icons'
-import { splitName } from '../utils/name'
 
-export default function Contact({ contact, name, availability }) {
-  const [ref, visible] = useScrollReveal({ threshold: 0.3 })
+const field =
+  'w-full rounded-[18px] border border-white/70 bg-white/55 px-5 text-sm text-[var(--color-ink)] placeholder:text-[#9a98b8] outline-none backdrop-blur transition focus:border-[#9b96f2] focus:bg-white/80'
 
-  if (!contact) return null
+// No backend: the form composes an email in the visitor's mail app.
+export default function Contact({ contact }) {
+  const [ref, visible] = useScrollReveal({ threshold: 0.2 })
+  const [form, setForm] = useState({ name: '', email: '', message: '' })
 
-  const links = [
-    contact.github && { href: contact.github, label: 'GitHub', Icon: GitHub },
-    contact.linkedin && { href: contact.linkedin, label: 'LinkedIn', Icon: LinkedIn },
-    contact.leetcode && { href: contact.leetcode, label: 'LeetCode', Icon: LeetCode },
-    contact.email && { href: `mailto:${contact.email}`, label: 'Email', Icon: Mail },
-  ].filter(Boolean)
+  if (!contact?.email) return null
 
-  const shortName = splitName(name).join(' ').trim()
+  const update = (key) => (e) => setForm((f) => ({ ...f, [key]: e.target.value }))
+
+  const submit = (e) => {
+    e.preventDefault()
+    const subject = `Project inquiry from ${form.name}`
+    const body = `${form.message}\n\n— ${form.name} (${form.email})`
+    window.location.href = `mailto:${contact.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`
+  }
 
   return (
-    <section id="contact" className="relative overflow-hidden">
-      <div aria-hidden className="clouds clouds-drift absolute -inset-[8%]" />
+    <section id="contact" className="shell py-8">
       <div
         ref={ref}
-        className={`relative mx-auto flex min-h-[90svh] max-w-6xl flex-col items-center justify-center px-4 py-24 text-center sm:px-6 ${
-          visible ? 'is-visible' : ''
-        }`}
+        className={`lavender rounded-[24px] px-5 py-14 sm:px-10 md:py-20 ${visible ? 'is-visible' : ''}`}
       >
-        <span className={`pill reveal ${visible ? 'is-visible' : ''}`}>
-          <span className="live-dot" />
-          {availability}
-        </span>
-
-        <h2 className="mt-8 max-w-4xl text-[2.6rem] sm:text-6xl md:text-7xl font-bold uppercase leading-[0.98] tracking-tight text-[#2b2b2b]">
-          <FillText text="Have a project in mind?" step={22} delay={150} />
-        </h2>
-
-        <p
-          className={`reveal mt-6 max-w-xl text-base md:text-lg leading-relaxed text-[var(--color-muted)] ${
-            visible ? 'is-visible' : ''
-          }`}
-          style={{ transitionDelay: '500ms' }}
-        >
-          Open to software engineering roles and collaborations. Let&apos;s build something clear, reliable and
-          impactful together.
-        </p>
-
-        <div className={`reveal mt-9 ${visible ? 'is-visible' : ''}`} style={{ transitionDelay: '650ms' }}>
-          <a
-            href={`mailto:${contact.email}?subject=Opportunity%20%E2%80%94%20${encodeURIComponent(name ?? '')}`}
-            className="btn-dark !px-7 !py-3.5 ring-4 ring-black/10"
-          >
-            Contact Me
-            <ArrowUpRight className="arrow" />
-          </a>
+        <div className="mx-auto max-w-[42rem] text-center">
+          <h2 className="reveal text-[2rem] font-medium leading-[1.05] tracking-[-0.025em] md:text-[2.75rem]">
+            Contact me to sizzle your project
+          </h2>
+          <p className="reveal mt-4 text-sm text-[#55546a]" style={{ transitionDelay: '100ms' }}>
+            Feel free to reach out with questions. I&apos;m open to new roles, projects, or just a chat.
+          </p>
         </div>
 
-        <ul className="mt-16 flex flex-wrap items-center justify-center gap-3 md:mt-24 md:gap-6">
-          <li className={`reveal ${visible ? 'is-visible' : ''}`} style={{ transitionDelay: '800ms' }}>
-            <a href="#top" className="inline-flex items-center gap-2 rounded-full bg-[var(--color-ink)] py-1.5 pl-1.5 pr-4 text-sm font-semibold text-white">
-              <img src="/f.png" alt="" className="h-7 w-7 rounded-full bg-white object-cover object-top" />
-              {shortName}
-            </a>
-          </li>
-          {links.map((item, i) => (
-            <li
-              key={item.label}
-              className={`reveal ${visible ? 'is-visible' : ''}`}
-              style={{ transitionDelay: `${880 + i * 80}ms` }}
-            >
-              <a
-                href={item.href}
-                target={item.href.startsWith('http') ? '_blank' : undefined}
-                rel={item.href.startsWith('http') ? 'noopener noreferrer' : undefined}
-                className="pill"
-              >
-                <item.Icon />
-                {item.label}
-              </a>
-            </li>
-          ))}
-        </ul>
+        <form onSubmit={submit} className="mx-auto mt-10 grid max-w-[42rem] gap-4 sm:grid-cols-2">
+          <label className="reveal" style={{ transitionDelay: '200ms' }}>
+            <span className="sr-only">Name</span>
+            <input required value={form.name} onChange={update('name')} placeholder="Name" className={`${field} h-12 !rounded-full`} />
+          </label>
+          <label className="reveal" style={{ transitionDelay: '260ms' }}>
+            <span className="sr-only">Email</span>
+            <input
+              required
+              type="email"
+              value={form.email}
+              onChange={update('email')}
+              placeholder="Email"
+              className={`${field} h-12 !rounded-full`}
+            />
+          </label>
+          <label className="reveal sm:col-span-2" style={{ transitionDelay: '320ms' }}>
+            <span className="sr-only">Message</span>
+            <textarea
+              required
+              rows={5}
+              value={form.message}
+              onChange={update('message')}
+              placeholder="Work description..."
+              className={`${field} resize-none py-4`}
+            />
+          </label>
+          <div className="reveal sm:col-span-2" style={{ transitionDelay: '380ms' }}>
+            <button type="submit" className="btn-dark w-full">
+              Submit
+            </button>
+            <p className="mt-3 text-center text-xs text-[#6d6b85]">Opens your email app with the message ready to send.</p>
+          </div>
+        </form>
       </div>
     </section>
   )

@@ -1,104 +1,78 @@
-import { useState } from 'react'
 import { useScrollReveal } from '../hooks/useScrollReveal'
-import SectionHeading from './ui/SectionHeading'
+import { Building, Graduation, Trophy } from './ui/Icons'
 
 const asList = (v) => (Array.isArray(v) ? v : v ? [v] : [])
+// "Dynamic Solution Innovators (DSi)" -> "DSi"
+const shortOrg = (org) => org.match(/\(([^)]+)\)\s*$/)?.[1] ?? org
 
-export default function Experience({ experience, education }) {
-  const [ref, visible] = useScrollReveal({ threshold: 0.05 })
-  const [hover, setHover] = useState(null)
-  const [pos, setPos] = useState({ x: 0, y: 0 })
+export default function Experience({ experience, education, competitiveProgramming, resume }) {
+  const [ref, visible] = useScrollReveal({ threshold: 0.1 })
 
-  const rows = [
+  const cp = competitiveProgramming
+  const cards = [
     ...asList(experience).map((e) => ({
-      kind: 'Work',
-      title: e.organization,
-      subtitle: e.role,
-      period: e.period,
-      details: [e.location, ...(e.highlights ?? [])].filter(Boolean),
+      Icon: Building,
+      mark: shortOrg(e.organization),
+      title: `${e.role} at ${shortOrg(e.organization)}`,
+      meta: e.period,
     })),
     ...asList(education).map((e) => ({
-      kind: 'Education',
-      title: e.institution,
-      subtitle: e.degree,
-      period: e.period,
-      details: [e.location, (e.cgpa || e.gpa) && `CGPA ${e.cgpa || e.gpa}`].filter(Boolean),
+      Icon: Graduation,
+      mark: e.institution,
+      title: `${e.degree}${e.cgpa ? ` · CGPA ${e.cgpa}` : ''}`,
+      meta: e.period,
     })),
-  ]
+    (cp?.leetcode || cp?.codeforces) && {
+      Icon: Trophy,
+      mark: 'Competitive programming',
+      title: [
+        cp.leetcode && `LeetCode max ${cp.leetcode.max_rating}`,
+        cp.codeforces && `Codeforces max ${cp.codeforces.max_rating}`,
+      ]
+        .filter(Boolean)
+        .join(' · '),
+      meta: 'Algorithms & problem solving',
+      href: cp.leetcode?.profile ?? cp.codeforces?.profile,
+    },
+  ].filter(Boolean)
 
-  if (!rows.length) return null
-
-  const years = rows.flatMap((r) => r.period?.match(/\d{4}/g) ?? []).map(Number)
-  const since = years.length ? Math.min(...years) : null
-
-  const onMove = (e) => {
-    const r = e.currentTarget.getBoundingClientRect()
-    setPos({ x: e.clientX - r.left, y: e.clientY - r.top })
-  }
-
-  const current = hover !== null ? rows[hover] : null
+  if (!cards.length) return null
 
   return (
-    <section id="experience" className="dark-section section-shell bg-[var(--color-ink-soft)] text-white">
-      <div className="section-inner">
-        <SectionHeading
-          title="Experience"
-          watermark="Experience"
-          aside={since ? `Building software since ${since}` : undefined}
-        />
-
-        <div ref={ref} className="relative" onMouseMove={onMove} onMouseLeave={() => setHover(null)}>
-          <ul>
-            {rows.map((row, i) => (
-              <li
-                key={`${row.title}-${row.subtitle}`}
-                onMouseEnter={() => setHover(i)}
-                className={`reveal border-b border-[var(--color-line-dark)] ${visible ? 'is-visible' : ''}`}
-                style={{ transitionDelay: `${i * 120}ms` }}
-              >
-                <div
-                  className={`flex flex-col gap-2 px-2 py-7 transition-all duration-500 ease-out-expo sm:flex-row sm:items-center sm:justify-between md:px-4 ${
-                    hover !== null && hover !== i ? 'opacity-40' : ''
-                  } ${hover === i ? 'md:translate-x-3' : ''}`}
-                >
-                  <div>
-                    <p className="mb-2 font-mono text-[10px] uppercase tracking-[0.2em] text-white/35">{row.kind}</p>
-                    <h3 className="text-lg md:text-xl font-semibold">{row.title}</h3>
-                    <p className="mt-1.5 text-[15px] md:text-base text-white/55">{row.subtitle}</p>
-                  </div>
-                  <p className="text-[15px] md:text-base text-white/55 sm:text-right">{row.period}</p>
-                </div>
-              </li>
-            ))}
-          </ul>
-
-          {/* cursor-following preview card */}
-          <div
-            aria-hidden
-            className={`pointer-events-none absolute left-0 top-0 z-10 hidden w-64 transition-[opacity,scale] duration-500 ease-out-expo md:block ${
-              current ? 'scale-100 opacity-100' : 'scale-75 opacity-0'
-            }`}
-            style={{ translate: `${pos.x + 24}px ${pos.y - 90}px` }}
-          >
-            <div className="rotate-[6deg] rounded-xl bg-[#d9d9d9] p-4 text-[var(--color-ink)] shadow-[0_30px_60px_-20px_rgba(0,0,0,0.7)]">
-              {current && (
-                <>
-                  <p className="font-mono text-[10px] uppercase tracking-widest text-black/40">{current.kind}</p>
-                  <p className="mt-2 text-base font-bold leading-snug">{current.subtitle}</p>
-                  <ul className="mt-3 space-y-1.5">
-                    {current.details.slice(0, 4).map((d) => (
-                      <li key={d} className="flex gap-2 text-xs leading-relaxed text-black/65">
-                        <span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-black/50" />
-                        <span className="line-clamp-2">{d}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </>
-              )}
-            </div>
-          </div>
-        </div>
+    <section id="experience" ref={ref} className={`shell grid gap-4 py-14 md:grid-cols-2 md:py-20 ${visible ? 'is-visible' : ''}`}>
+      <div className="card reveal reveal-left flex flex-col justify-between gap-8 p-7 md:p-8">
+        <h2 className="heading-lg !text-[2rem] md:!text-[2.4rem]">
+          Wanna see
+          <br />
+          my experience?
+        </h2>
+        {resume && (
+          <a href={resume} target="_blank" rel="noopener noreferrer" className="btn-dark self-start !py-2.5">
+            Download CV
+          </a>
+        )}
       </div>
+
+      {cards.map((c, i) => {
+        const Tag = c.href ? 'a' : 'div'
+        return (
+          <Tag
+            key={c.title}
+            {...(c.href ? { href: c.href, target: '_blank', rel: 'noopener noreferrer' } : {})}
+            className={`card reveal group block p-7 transition-shadow duration-500 hover:shadow-[0_24px_48px_-28px_rgba(0,0,0,0.35)] md:p-8 ${
+              (i + 1) % 2 === 0 ? 'reveal-left' : 'reveal-right'
+            }`}
+            style={{ transitionDelay: `${120 + i * 120}ms` }}
+          >
+            <p className="flex items-center gap-2.5 text-xl font-semibold tracking-tight text-[var(--color-faint)] transition-colors duration-300 group-hover:text-[var(--color-teal)]">
+              <c.Icon size={24} />
+              {c.mark}
+            </p>
+            <p className="mt-6 text-lg font-medium leading-snug tracking-tight">{c.title}</p>
+            <p className="mt-3 text-[13px] text-[var(--color-muted)]">{c.meta}</p>
+          </Tag>
+        )
+      })}
     </section>
   )
 }
