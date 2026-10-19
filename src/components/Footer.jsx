@@ -1,23 +1,25 @@
-export default function Footer({ contact }) {
+export default function Footer({ name, contact }) {
   const year = new Date().getFullYear()
 
   return (
-    <footer className="border-t border-[var(--color-border)] px-5 sm:px-6 py-10">
-      <div className="max-w-5xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-[var(--color-muted)]">
-        <p>© {year} Md Shariful Islam Rayhan</p>
-        <div className="flex flex-wrap items-center justify-center gap-4">
-          {contact?.linkedin && (
-            <a href={contact.linkedin} target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">
-              LinkedIn
+    <footer className="bg-[var(--color-ink)] px-4 py-8 text-white/55 sm:px-6">
+      <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 text-sm sm:flex-row">
+        <p>
+          © {year} {name}
+        </p>
+        <div className="flex flex-wrap items-center justify-center gap-6">
+          {contact?.resume && (
+            <a href={contact.resume} target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">
+              Résumé
             </a>
           )}
-          {contact?.github && (
-            <a href={contact.github} target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">
-              GitHub
+          {contact?.email && (
+            <a href={`mailto:${contact.email}`} className="hover:text-white transition-colors">
+              {contact.email}
             </a>
           )}
-          <a href="#about" className="hover:text-white transition-colors">
-            Back to top
+          <a href="#top" className="hover:text-white transition-colors">
+            Back to top ↑
           </a>
         </div>
       </div>

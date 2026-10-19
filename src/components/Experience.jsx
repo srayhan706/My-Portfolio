@@ -1,65 +1,102 @@
+import { useState } from 'react'
 import { useScrollReveal } from '../hooks/useScrollReveal'
 import SectionHeading from './ui/SectionHeading'
 
-export default function Experience({ experience }) {
-  const entries = Array.isArray(experience) ? experience : experience ? [experience] : []
-  const [ref, visible] = useScrollReveal()
+const asList = (v) => (Array.isArray(v) ? v : v ? [v] : [])
 
-  if (!entries.length) return null
+export default function Experience({ experience, education }) {
+  const [ref, visible] = useScrollReveal({ threshold: 0.05 })
+  const [hover, setHover] = useState(null)
+  const [pos, setPos] = useState({ x: 0, y: 0 })
+
+  const rows = [
+    ...asList(experience).map((e) => ({
+      kind: 'Work',
+      title: e.organization,
+      subtitle: e.role,
+      period: e.period,
+      details: [e.location, ...(e.highlights ?? [])].filter(Boolean),
+    })),
+    ...asList(education).map((e) => ({
+      kind: 'Education',
+      title: e.institution,
+      subtitle: e.degree,
+      period: e.period,
+      details: [e.location, (e.cgpa || e.gpa) && `CGPA ${e.cgpa || e.gpa}`].filter(Boolean),
+    })),
+  ]
+
+  if (!rows.length) return null
+
+  const years = rows.flatMap((r) => r.period?.match(/\d{4}/g) ?? []).map(Number)
+  const since = years.length ? Math.min(...years) : null
+
+  const onMove = (e) => {
+    const r = e.currentTarget.getBoundingClientRect()
+    setPos({ x: e.clientX - r.left, y: e.clientY - r.top })
+  }
+
+  const current = hover !== null ? rows[hover] : null
 
   return (
-    <section id="experience" className="section-shell border-t border-[var(--color-border)]">
-      <div
-        ref={ref}
-        className={`section-inner reveal-base ${visible ? 'reveal-visible' : 'reveal-hidden'}`}
-      >
+    <section id="experience" className="dark-section section-shell bg-[var(--color-ink-soft)] text-white">
+      <div className="section-inner">
         <SectionHeading
-          eyebrow="Experience"
-          title="Where I build professionally"
-          description="Recent role and team context—so you can see how I work in production environments."
+          title="Experience"
+          watermark="Experience"
+          aside={since ? `Building software since ${since}` : undefined}
         />
-        <div className="space-y-4">
-          {entries.map((entry, index) => (
-            <article
-              key={`${entry.role}-${entry.organization}`}
-              className="glass-panel rounded-xl p-6 md:p-8 relative overflow-hidden group hover:border-[var(--color-border-strong)] hover:shadow-[0_8px_32px_-16px_rgba(157,140,255,0.18)] transition-all duration-300"
-              style={{
-                transitionDelay: visible ? `${index * 80}ms` : '0ms',
-              }}
-            >
-              <div
-                className="absolute top-0 left-0 h-full w-1 bg-gradient-to-b from-[var(--color-accent)] to-[var(--color-teal)]/60"
-                aria-hidden
-              />
-              <div className="pl-3 md:pl-4 flex flex-col md:flex-row md:items-start md:justify-between gap-4">
-                <div>
-                  <p className="text-[11px] font-mono uppercase tracking-widest text-[var(--color-muted)] mb-2">
-                    {String(index + 1).padStart(2, '0')}
-                  </p>
-                  <h3 className="text-xl font-semibold text-white group-hover:text-[var(--color-accent-fg)] transition-colors">
-                    {entry.role}
-                  </h3>
-                  <p className="text-[var(--color-accent)] mt-1 font-medium">{entry.organization}</p>
-                  {entry.location && (
-                    <p className="text-sm text-[var(--color-muted)] mt-1">{entry.location}</p>
-                  )}
+
+        <div ref={ref} className="relative" onMouseMove={onMove} onMouseLeave={() => setHover(null)}>
+          <ul>
+            {rows.map((row, i) => (
+              <li
+                key={`${row.title}-${row.subtitle}`}
+                onMouseEnter={() => setHover(i)}
+                className={`reveal border-b border-[var(--color-line-dark)] ${visible ? 'is-visible' : ''}`}
+                style={{ transitionDelay: `${i * 120}ms` }}
+              >
+                <div
+                  className={`flex flex-col gap-2 px-2 py-7 transition-all duration-500 ease-out-expo sm:flex-row sm:items-center sm:justify-between md:px-4 ${
+                    hover !== null && hover !== i ? 'opacity-40' : ''
+                  } ${hover === i ? 'md:translate-x-3' : ''}`}
+                >
+                  <div>
+                    <p className="mb-2 font-mono text-[10px] uppercase tracking-[0.2em] text-white/35">{row.kind}</p>
+                    <h3 className="text-lg md:text-xl font-semibold">{row.title}</h3>
+                    <p className="mt-1.5 text-[15px] md:text-base text-white/55">{row.subtitle}</p>
+                  </div>
+                  <p className="text-[15px] md:text-base text-white/55 sm:text-right">{row.period}</p>
                 </div>
-                <p className="shrink-0 inline-flex self-start rounded-full border border-[var(--color-border)] bg-white/[0.03] px-3 py-1.5 text-xs font-mono text-[var(--color-muted)]">
-                  {entry.period}
-                </p>
-              </div>
-              {entry.highlights?.length > 0 && (
-                <ul className="mt-6 pl-3 md:pl-4 space-y-2.5">
-                  {entry.highlights.map((h) => (
-                    <li key={h} className="flex gap-3 text-sm text-[#c8c8d0] leading-relaxed">
-                      <span className="mt-2 h-1 w-1 shrink-0 rounded-full bg-[var(--color-accent)]" />
-                      <span>{h}</span>
-                    </li>
-                  ))}
-                </ul>
+              </li>
+            ))}
+          </ul>
+
+          {/* cursor-following preview card */}
+          <div
+            aria-hidden
+            className={`pointer-events-none absolute left-0 top-0 z-10 hidden w-64 transition-[opacity,scale] duration-500 ease-out-expo md:block ${
+              current ? 'scale-100 opacity-100' : 'scale-75 opacity-0'
+            }`}
+            style={{ translate: `${pos.x + 24}px ${pos.y - 90}px` }}
+          >
+            <div className="rotate-[6deg] rounded-xl bg-[#d9d9d9] p-4 text-[var(--color-ink)] shadow-[0_30px_60px_-20px_rgba(0,0,0,0.7)]">
+              {current && (
+                <>
+                  <p className="font-mono text-[10px] uppercase tracking-widest text-black/40">{current.kind}</p>
+                  <p className="mt-2 text-base font-bold leading-snug">{current.subtitle}</p>
+                  <ul className="mt-3 space-y-1.5">
+                    {current.details.slice(0, 4).map((d) => (
+                      <li key={d} className="flex gap-2 text-xs leading-relaxed text-black/65">
+                        <span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-black/50" />
+                        <span className="line-clamp-2">{d}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </>
               )}
-            </article>
-          ))}
+            </div>
+          </div>
         </div>
       </div>
     </section>

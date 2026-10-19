@@ -1,24 +1,42 @@
-export default function SectionHeading({ eyebrow, title, description, align = 'left' }) {
-  const alignClass = align === 'center' ? 'text-center mx-auto items-center' : 'text-left items-start'
+import { useScrollReveal } from '../../hooks/useScrollReveal'
+import FillText from './FillText'
+
+// "/TITLE" heading with a giant faded watermark word behind it.
+export default function SectionHeading({ title, watermark, aside, align = 'left' }) {
+  const [ref, visible] = useScrollReveal({ threshold: 0.4 })
+  const centered = align === 'center'
 
   return (
-    <header className={`mb-12 md:mb-14 max-w-2xl flex flex-col ${alignClass}`}>
-      {eyebrow && (
-        <div className="flex items-center gap-3 mb-4">
-          <span className="h-px w-8 bg-[var(--color-accent)]/70" aria-hidden />
-          <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[var(--color-accent)]">
-            {eyebrow}
+    <header
+      ref={ref}
+      className={`relative mb-12 md:mb-16 pt-8 md:pt-12 ${visible ? 'is-visible' : ''}`}
+    >
+      {watermark && (
+        <span
+          aria-hidden
+          className={`watermark top-0 ${centered ? 'text-center' : 'text-center md:text-left'}`}
+        >
+          {watermark}
+        </span>
+      )}
+      <div
+        className={`relative flex flex-col gap-3 sm:flex-row sm:items-end ${
+          centered ? 'items-center text-center sm:justify-center' : 'sm:justify-between'
+        }`}
+      >
+        <h2 className="text-[2.25rem] sm:text-5xl md:text-[3.5rem] font-semibold uppercase leading-[1] tracking-tight">
+          <FillText text={`/${title}`} />
+        </h2>
+        {aside && (
+          <p
+            className={`text-sm md:text-base font-medium opacity-0 transition-opacity duration-700 delay-500 ${
+              visible ? 'opacity-100' : ''
+            }`}
+          >
+            {aside}
           </p>
-        </div>
-      )}
-      <h2 className="font-display text-[2rem] md:text-[2.65rem] leading-[1.12] font-semibold text-white tracking-tight text-balance">
-        {title}
-      </h2>
-      {description && (
-        <p className="mt-4 text-[var(--color-muted)] text-base md:text-[1.05rem] leading-relaxed">
-          {description}
-        </p>
-      )}
+        )}
+      </div>
     </header>
   )
 }

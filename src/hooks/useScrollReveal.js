@@ -1,12 +1,12 @@
 import { useEffect, useRef, useState } from 'react'
 
-export function useScrollReveal(options = {}) {
+export function useScrollReveal({ threshold = 0.15, rootMargin = '0px 0px -60px 0px' } = {}) {
   const ref = useRef(null)
   const [visible, setVisible] = useState(false)
 
   useEffect(() => {
     const el = ref.current
-    if (!el) return
+    if (!el) return undefined
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
@@ -14,11 +14,11 @@ export function useScrollReveal(options = {}) {
           observer.disconnect()
         }
       },
-      { threshold: 0.1, rootMargin: '0px 0px -50px 0px', ...options },
+      { threshold, rootMargin },
     )
     observer.observe(el)
     return () => observer.disconnect()
-  }, [])
+  }, [threshold, rootMargin])
 
   return [ref, visible]
 }

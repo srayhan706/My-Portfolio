@@ -1,127 +1,177 @@
+import { useState } from 'react'
 import { useScrollReveal } from '../hooks/useScrollReveal'
 import SectionHeading from './ui/SectionHeading'
+import { ArrowUpRight } from './ui/Icons'
 
-const HIGHLIGHT_LINES = 2
+const FRONTEND = ['next.js', 'react', 'react.js', 'javascript']
 
-export default function Projects({ projects }) {
-  const [ref, visible] = useScrollReveal()
+function categoryOf(project) {
+  if (project.category) return project.category
+  const tech = (project.tech ?? []).map((t) => t.toLowerCase())
+  if (tech.some((t) => t.includes('socket'))) return 'Systems'
+  if (tech.some((t) => FRONTEND.includes(t))) return 'Full-stack'
+  return 'Backend'
+}
+
+function Cover({ project, index }) {
+  const dark = index % 2 === 0
+  const [headline, ...rest] = project.title.split(/\s[—-]\s/)
+  const subtitle = rest.join(' — ') || project.description
+
+  return (
+    <div
+      className={`relative aspect-[16/10] overflow-hidden ${
+        dark ? 'bg-[#141414] text-white' : 'bg-[#e9e9e9] text-[var(--color-ink)]'
+      }`}
+    >
+      <div
+        aria-hidden
+        className={`absolute inset-0 opacity-60 ${
+          dark
+            ? 'bg-[radial-gradient(circle_at_75%_120%,rgba(255,255,255,0.22),transparent_55%)]'
+            : 'bg-[radial-gradient(circle_at_20%_-10%,rgba(255,255,255,0.95),transparent_55%)]'
+        }`}
+      />
+      {/* faux browser window */}
+      <div
+        className={`absolute inset-x-[8%] top-[16%] bottom-[-6%] rounded-t-xl border transition-transform duration-700 ease-out-expo group-hover:-translate-y-2 group-hover:scale-[1.02] ${
+          dark ? 'border-white/10 bg-white/[0.04]' : 'border-black/10 bg-white/70'
+        }`}
+      >
+        <div className={`flex items-center gap-1.5 border-b px-3 py-2 ${dark ? 'border-white/10' : 'border-black/10'}`}>
+          {[0, 1, 2].map((d) => (
+            <span key={d} className={`h-1.5 w-1.5 rounded-full ${dark ? 'bg-white/30' : 'bg-black/20'}`} />
+          ))}
+          <span className={`ml-3 h-1.5 w-1/3 rounded-full ${dark ? 'bg-white/10' : 'bg-black/10'}`} />
+        </div>
+        <div className="px-[7%] pt-[6%]">
+          <p className="text-[clamp(1.1rem,2.6vw,1.9rem)] font-bold leading-tight tracking-tight line-clamp-1">
+            {headline}
+          </p>
+          <p className={`mt-1.5 text-[11px] sm:text-xs line-clamp-1 ${dark ? 'text-white/50' : 'text-black/50'}`}>
+            {subtitle}
+          </p>
+          <div className="mt-[6%] flex flex-wrap gap-1.5">
+            {project.tech?.slice(0, 4).map((t) => (
+              <span
+                key={t}
+                className={`rounded-md px-2 py-1 font-mono text-[10px] ${
+                  dark ? 'bg-white/[0.07] text-white/70' : 'bg-black/[0.06] text-black/60'
+                }`}
+              >
+                {t}
+              </span>
+            ))}
+          </div>
+        </div>
+      </div>
+      <span
+        className={`absolute left-4 top-4 rounded-full px-3 py-1 text-[10px] font-bold uppercase tracking-wider ${
+          dark ? 'bg-white text-[var(--color-ink)]' : 'bg-[var(--color-ink)] text-white'
+        }`}
+      >
+        {categoryOf(project)}
+      </span>
+    </div>
+  )
+}
+
+function ProjectCard({ project, index, order, visible }) {
+  const [pos, setPos] = useState({ x: 0, y: 0 })
+
+  const onMove = (e) => {
+    const r = e.currentTarget.getBoundingClientRect()
+    setPos({ x: e.clientX - r.left, y: e.clientY - r.top })
+  }
+
+  return (
+    <article
+      className={visible ? 'animate-rise' : 'opacity-0'}
+      style={{ animationDelay: `${order * 110}ms` }}
+    >
+      <a
+        href={project.github}
+        target="_blank"
+        rel="noopener noreferrer"
+        onMouseMove={onMove}
+        className="group relative block overflow-hidden rounded-2xl border border-[var(--color-line)] bg-white p-2 transition-shadow duration-500 hover:shadow-[0_30px_60px_-30px_rgba(0,0,0,0.35)] md:cursor-none"
+      >
+        <div className="relative overflow-hidden rounded-xl">
+          <Cover project={project} index={index} />
+          {/* cursor-following open button */}
+          <span
+            aria-hidden
+            className="pointer-events-none absolute hidden h-16 w-16 items-center justify-center rounded-full bg-white text-[var(--color-ink)] shadow-lg transition-transform duration-300 ease-out-expo scale-0 group-hover:scale-100 md:flex"
+            style={{ left: pos.x - 32, top: pos.y - 40 }}
+          >
+            <ArrowUpRight size={22} />
+          </span>
+        </div>
+        <div className="px-3 pb-4 pt-5">
+          <h3 className="text-xl md:text-[1.4rem] font-semibold leading-snug tracking-tight text-[var(--color-muted)] transition-colors duration-500 group-hover:text-[var(--color-ink)]">
+            {project.title}
+          </h3>
+          <p className="mt-2 text-sm leading-relaxed text-[var(--color-muted)] line-clamp-2">{project.description}</p>
+          <div className="mt-4 flex flex-wrap gap-2">
+            {project.tech?.slice(0, 3).map((t) => (
+              <span key={t} className="rounded-full border border-[var(--color-line)] px-3.5 py-1.5 text-[13px] font-medium">
+                {t}
+              </span>
+            ))}
+            {project.tech?.length > 3 && (
+              <span className="rounded-full border border-[var(--color-line)] px-3.5 py-1.5 text-[13px] font-medium text-[var(--color-faint)]">
+                +{project.tech.length - 3}
+              </span>
+            )}
+          </div>
+        </div>
+      </a>
+    </article>
+  )
+}
+
+export default function Projects({ projects, githubHref }) {
+  const [filter, setFilter] = useState('All')
+  const [ref, visible] = useScrollReveal({ threshold: 0.05 })
 
   if (!projects?.length) return null
 
-  const [featured, ...rest] = projects
+  const tabs = ['All', ...new Set(projects.map(categoryOf))]
+  const shown = filter === 'All' ? projects : projects.filter((p) => categoryOf(p) === filter)
 
   return (
-    <section id="projects" className="section-shell border-t border-[var(--color-border)]">
-      <div
-        ref={ref}
-        className={`section-inner reveal-base ${visible ? 'reveal-visible' : 'reveal-hidden'}`}
-      >
-        <SectionHeading
-          eyebrow="Projects"
-          title="Proof of work"
-          description="Selected builds that show backend depth, frontend polish, and real-world problem solving."
-        />
+    <section id="work" className="section-shell bg-[var(--color-paper)]">
+      <div className="section-inner">
+        <SectionHeading title="Selected Work" watermark="Portfolio" align="center" />
 
-        {featured && (
-          <article className="glass-panel rounded-xl p-6 md:p-8 mb-6 relative overflow-hidden group hover:border-[var(--color-accent)]/20 hover:shadow-[0_12px_48px_-20px_rgba(157,140,255,0.22)] transition-all duration-300">
-            <div
-              className="pointer-events-none absolute -right-16 -top-16 h-56 w-56 rounded-full bg-[var(--color-accent-soft)] blur-3xl opacity-60 group-hover:opacity-100 transition-opacity duration-500"
-              aria-hidden
-            />
-            <div className="relative flex flex-col lg:flex-row lg:items-start lg:justify-between gap-6">
-              <div className="max-w-2xl">
-                <p className="text-[11px] uppercase tracking-[0.2em] text-[var(--color-teal)] mb-3">
-                  Featured project
-                </p>
-                <h3 className="font-display text-2xl md:text-3xl text-white group-hover:text-[var(--color-accent-fg)] transition-colors">
-                  {featured.title}
-                </h3>
-                <p className="mt-3 text-[var(--color-muted)] leading-relaxed">{featured.description}</p>
-                {featured.highlights?.length > 0 && (
-                  <ul className="mt-5 space-y-2.5">
-                    {featured.highlights.map((highlight) => (
-                      <li key={highlight} className="flex gap-3 text-sm text-[#c8c8d0] leading-relaxed">
-                        <span className="mt-2 h-1 w-1 shrink-0 rounded-full bg-[var(--color-teal)]" />
-                        <span>{highlight}</span>
-                      </li>
-                    ))}
-                  </ul>
-                )}
-                <div className="flex flex-wrap gap-2 mt-6">
-                  {featured.tech?.map((t) => (
-                    <span
-                      key={t}
-                      className="px-2.5 py-1 rounded-md border border-[var(--color-border)] bg-black/20 text-[11px] font-mono text-[var(--color-muted)] hover:border-[var(--color-accent)]/30 hover:text-white transition-colors"
-                    >
-                      {t}
-                    </span>
-                  ))}
-                </div>
-              </div>
-              {featured.github && (
-                <a
-                  href={featured.github}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="shrink-0 text-sm text-[var(--color-muted)] hover:text-[var(--color-accent-fg)] underline-offset-4 hover:underline transition-colors"
-                >
-                  Repository →
-                </a>
-              )}
-            </div>
-          </article>
-        )}
+        <div ref={ref} className={`reveal mb-8 flex flex-wrap items-center justify-between gap-4 ${visible ? 'is-visible' : ''}`}>
+          <div className="flex flex-wrap gap-1" role="tablist" aria-label="Filter projects">
+            {tabs.map((t) => (
+              <button
+                key={t}
+                type="button"
+                role="tab"
+                aria-selected={filter === t}
+                onClick={() => setFilter(t)}
+                className={`rounded-full px-4 py-2 text-[15px] font-semibold transition-all duration-300 ${
+                  filter === t ? 'bg-[var(--color-ink)] text-white' : 'text-[var(--color-muted)] hover:text-[var(--color-ink)]'
+                }`}
+              >
+                {t}
+              </button>
+            ))}
+          </div>
+          {githubHref && (
+            <a href={githubHref} target="_blank" rel="noopener noreferrer" className="pill">
+              View All Work
+              <ArrowUpRight className="arrow" />
+            </a>
+          )}
+        </div>
 
-        <div className="grid gap-4 grid-cols-1 md:grid-cols-3 md:items-stretch">
-          {rest.map((p, i) => (
-            <article
-              key={p.title}
-              className="glass-panel rounded-xl p-5 flex flex-col h-full min-h-[22rem] group hover:border-[var(--color-accent)]/20 hover:-translate-y-1 hover:shadow-[0_8px_32px_-12px_rgba(157,140,255,0.2)] transition-all duration-300 reveal-base"
-              style={{
-                opacity: visible ? 1 : 0,
-                transform: visible ? 'translateY(0)' : 'translateY(20px)',
-                transitionDelay: visible ? `${(i + 1) * 80}ms` : '0ms',
-              }}
-            >
-              <p className="text-[11px] font-mono text-[var(--color-muted)] mb-2">
-                {String(i + 2).padStart(2, '0')}
-              </p>
-              <h3 className="text-base font-semibold text-white leading-snug min-h-[2.75rem] line-clamp-2 group-hover:text-[var(--color-accent-fg)] transition-colors">
-                {p.title}
-              </h3>
-              <p className="text-sm text-[var(--color-muted)] mt-2 leading-relaxed line-clamp-3 min-h-[4.25rem]">
-                {p.description}
-              </p>
-              <ul className="mt-3 space-y-1.5 min-h-[3.25rem]">
-                {p.highlights?.slice(0, HIGHLIGHT_LINES).map((highlight) => (
-                  <li key={highlight} className="text-xs text-[#b8b8c2] leading-relaxed line-clamp-2">
-                    · {highlight}
-                  </li>
-                ))}
-              </ul>
-              <div className="mt-auto pt-4 border-t border-[var(--color-border)] flex flex-col gap-3">
-                <div className="flex flex-wrap gap-1.5 min-h-[1.75rem]">
-                  {p.tech?.slice(0, 4).map((t) => (
-                    <span
-                      key={t}
-                      className="px-2 py-0.5 rounded border border-[var(--color-border)] text-[10px] font-mono text-[var(--color-muted)] group-hover:border-[var(--color-border-strong)] transition-colors"
-                    >
-                      {t}
-                    </span>
-                  ))}
-                </div>
-                {p.github && (
-                  <a
-                    href={p.github}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-xs font-medium text-[var(--color-accent)] hover:text-white transition-colors w-fit"
-                  >
-                    GitHub →
-                  </a>
-                )}
-              </div>
-            </article>
+        <div key={filter} className="grid gap-6 md:grid-cols-2 md:gap-8">
+          {shown.map((p, i) => (
+            <ProjectCard key={p.title} project={p} index={projects.indexOf(p)} order={i} visible={visible} />
           ))}
         </div>
       </div>

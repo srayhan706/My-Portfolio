@@ -1,167 +1,80 @@
-export default function Hero({ about, contact, experience }) {
+import { ArrowUpRight, Codeforces, GitHub, LeetCode, LinkedIn } from './ui/Icons'
+import { splitName } from '../utils/name'
+
+function Letters({ word, offset, className }) {
+  return (
+    <span className={`inline-block whitespace-nowrap ${className}`} aria-hidden>
+      {Array.from(word).map((ch, i) => (
+        <span key={i} className="animate-char" style={{ animationDelay: `${150 + (offset + i) * 45}ms` }}>
+          {ch}
+        </span>
+      ))}
+    </span>
+  )
+}
+
+export default function Hero({ about, contact }) {
   if (!about) return null
 
-  const role = experience?.[0]
+  const [first, last] = splitName(about.name)
+  const socials = [
+    contact?.github && { href: contact.github, label: 'GitHub', Icon: GitHub },
+    contact?.linkedin && { href: contact.linkedin, label: 'LinkedIn', Icon: LinkedIn },
+    contact?.leetcode && { href: contact.leetcode, label: 'LeetCode', Icon: LeetCode },
+    contact?.codeforces && { href: contact.codeforces, label: 'Codeforces', Icon: Codeforces },
+  ].filter(Boolean)
 
   return (
-    <section
-      id="about"
-      className="relative min-h-[92vh] flex items-center section-shell pt-32 pb-16 md:pt-36 overflow-hidden"
-    >
-      <div className="section-inner w-full">
-        <div className="grid items-center gap-12 lg:grid-cols-[1.05fr_0.95fr] lg:gap-14">
+    <section id="top" className="relative overflow-hidden bg-white">
+      <div className="relative mx-auto flex min-h-[100svh] max-w-6xl flex-col px-4 pt-28 sm:px-6 md:pt-36 lg:min-h-[max(100svh,760px)]">
+        <h1
+          className="font-wide relative z-0 text-center font-extrabold uppercase leading-[0.95] tracking-[0.02em] text-[var(--color-ink)] text-[11.4vw] sm:text-[10vw] lg:text-[clamp(3rem,5.8vw,5.5rem)]"
+          aria-label={about.name}
+        >
+          <Letters word={first} offset={0} className="text-outline" />
+          <span className="hidden lg:inline"> </span>
+          <br className="lg:hidden" />
+          <Letters word={last} offset={first.length} />
+        </h1>
 
-          {/* Left column */}
-          <div className="order-2 lg:order-1 border-l border-[var(--color-border-strong)] pl-6 md:pl-8">
+        {/* Portrait rising from the bottom edge */}
+        <div className="pointer-events-none relative mx-auto mt-6 h-[52vh] w-full max-w-[34rem] lg:absolute lg:bottom-0 lg:left-1/2 lg:mt-0 lg:h-[min(72vh,660px)] lg:max-w-none lg:w-auto">
+          <img
+            src="/f.png"
+            alt={`Portrait of ${about.name}`}
+            width={500}
+            height={500}
+            className="hero-photo absolute bottom-0 left-1/2 h-full w-auto max-w-none object-contain object-bottom mix-blend-multiply lg:relative lg:left-0"
+          />
+        </div>
 
-            {role && (
-              <div
-                className="inline-flex items-center gap-2 rounded-md border border-[var(--color-border)] bg-[var(--color-surface)] px-3 py-1.5 mb-6 animate-fade-up"
-                style={{ animationDelay: '0ms' }}
-              >
-                <span className="h-1.5 w-1.5 rounded-full bg-[var(--color-teal)] animate-pulse" />
-                <span className="text-xs text-[var(--color-muted)]">
-                  {role.role} · {role.organization}
-                </span>
-              </div>
-            )}
-
-            <p
-              className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--color-muted)] mb-4 animate-fade-up"
-              style={{ animationDelay: '80ms' }}
-            >
-              Dhaka, Bangladesh
-            </p>
-
-            <h1
-              className="font-display text-[2.5rem] sm:text-5xl lg:text-[3.5rem] leading-[1.05] font-semibold text-white tracking-tight text-balance animate-fade-up"
-              style={{ animationDelay: '160ms' }}
-            >
-              {about.name}
-            </h1>
-
-            <p
-              className="mt-3 text-2xl sm:text-3xl text-gradient-display font-display italic animate-fade-up"
-              style={{ animationDelay: '260ms' }}
-            >
-              {about.title}
-            </p>
-
-            <p
-              className="mt-6 text-lg text-[#d8d8e0] leading-relaxed max-w-xl animate-fade-up"
-              style={{ animationDelay: '360ms' }}
-            >
-              {about.tagline}
-            </p>
-
-            <p
-              className="mt-4 text-[var(--color-muted)] leading-relaxed max-w-xl text-[15px] sm:text-base animate-fade-up"
-              style={{ animationDelay: '440ms' }}
-            >
-              {about.summary}
-            </p>
-
-            <div
-              className="mt-8 pt-6 border-t border-[var(--color-border)] max-w-xl animate-fade-up"
-              style={{ animationDelay: '540ms' }}
-            >
-              <a
-                href="#projects"
-                className="inline-block text-[15px] font-semibold text-white border-b border-[var(--color-accent)] pb-0.5 hover:text-[var(--color-accent-fg)] transition-colors"
-              >
-                See projects
+        <div className="relative z-20 mt-auto grid gap-8 pb-10 pt-8 md:pb-14 lg:grid-cols-2 lg:items-end">
+          <div className="max-w-sm lg:max-w-[18rem] animate-rise" style={{ animationDelay: '900ms' }}>
+            <p className="text-2xl md:text-[1.75rem] lg:text-2xl font-bold tracking-tight">{about.title}</p>
+            <p className="mt-3 text-[15px] leading-relaxed text-[var(--color-muted)]">{about.tagline}</p>
+            <div className="mt-6 flex flex-wrap items-center gap-3">
+              <a href="#contact" className="btn-dark">
+                Let&apos;s collaborate
+                <ArrowUpRight className="arrow" />
               </a>
-
-              <ul className="mt-4 space-y-1.5 text-sm">
-                {contact?.email && (
-                  <li>
-                    <span className="text-[var(--color-muted)] w-14 inline-block">Email</span>
-                    <a
-                      href={`mailto:${contact.email}`}
-                      className="text-white/90 hover:text-white break-all sm:break-normal"
-                    >
-                      {contact.email}
-                    </a>
-                  </li>
-                )}
-                {contact?.resume && (
-                  <li>
-                    <span className="text-[var(--color-muted)] w-14 inline-block">Resume</span>
-                    <a
-                      href={contact.resume}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-white/90 hover:text-white underline-offset-2 hover:underline"
-                    >
-                      PDF download
-                    </a>
-                  </li>
-                )}
-                {contact?.linkedin && (
-                  <li>
-                    <span className="text-[var(--color-muted)] w-14 inline-block">Social</span>
-                    <a
-                      href={contact.linkedin}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-white/90 hover:text-white underline-offset-2 hover:underline"
-                    >
-                      LinkedIn
-                    </a>
-                    {contact.github && (
-                      <>
-                        <span className="text-[var(--color-muted)] mx-2">·</span>
-                        <a
-                          href={contact.github}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-white/90 hover:text-white underline-offset-2 hover:underline"
-                        >
-                          GitHub
-                        </a>
-                      </>
-                    )}
-                  </li>
-                )}
-              </ul>
+              {contact?.resume && (
+                <a href={contact.resume} target="_blank" rel="noopener noreferrer" className="pill">
+                  Download CV
+                </a>
+              )}
             </div>
           </div>
 
-          {/* Right column — photo */}
-          <div
-            className="order-1 lg:order-2 flex justify-center lg:justify-end animate-fade-up"
-            style={{ animationDelay: '200ms' }}
-          >
-            <div className="relative w-full max-w-[21rem]">
-              <div
-                className="absolute -inset-1 rounded-xl bg-gradient-to-br from-[var(--color-accent)]/30 to-[var(--color-teal)]/10 blur-sm"
-                aria-hidden
-              />
-              <div className="relative glass-panel rounded-xl p-2 hover:shadow-[0_0_40px_-12px_rgba(157,140,255,0.3)] transition-shadow duration-500">
-                <div className="overflow-hidden rounded-lg border border-[var(--color-border)]">
-                  <img
-                    src="/f.png"
-                    alt="Portrait of Md Shariful Islam Rayhan"
-                    className="aspect-[4/5] w-full object-cover object-top grayscale-[15%] contrast-[1.02] hover:grayscale-0 transition-all duration-700"
-                    width={440}
-                    height={550}
-                  />
-                </div>
-                <div className="mt-3 flex items-center justify-between gap-3 px-1">
-                  <div>
-                    <p className="text-[10px] uppercase tracking-wider text-[var(--color-muted)]">Now</p>
-                    <p className="text-sm font-medium text-white truncate">
-                      {role?.organization ?? 'Available'}
-                    </p>
-                  </div>
-                  <span className="rounded-md bg-[var(--color-accent-soft)] px-2 py-1 text-[10px] font-medium text-[var(--color-accent-fg)]">
-                    Active
-                  </span>
-                </div>
-              </div>
-            </div>
-          </div>
-
+          <ul className="flex flex-wrap gap-3 lg:flex-col lg:items-end">
+            {socials.map((item, i) => (
+              <li key={item.label} className="animate-rise" style={{ animationDelay: `${1050 + i * 110}ms` }}>
+                <a href={item.href} target="_blank" rel="noopener noreferrer" className="pill min-w-[8.5rem] justify-center">
+                  <item.Icon />
+                  {item.label}
+                </a>
+              </li>
+            ))}
+          </ul>
         </div>
       </div>
     </section>

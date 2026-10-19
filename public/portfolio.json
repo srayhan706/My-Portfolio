@@ -156,6 +156,8 @@
   ],
   "research": {
     "title": "CATS: Curvature-Adaptive Temporal Suppression for Long-Video Question Answering",
+    "paper_url": "https://arxiv.org/pdf/2605.09223",
+    "paper_label": "Read paper on arXiv (PDF)",
     "description": "A novel budget-aware frame selection method for multimodal large language models addressing inefficiencies in long-video question answering caused by suboptimal frame sampling.",
     "highlights": [
       "Introduces curvature-adaptive temporal suppression to reduce redundant frames.",

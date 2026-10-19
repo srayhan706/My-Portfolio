@@ -1,73 +1,85 @@
+import { useEffect, useState } from 'react'
 import { useScrollReveal } from '../hooks/useScrollReveal'
-import SectionHeading from './ui/SectionHeading'
+import { ArrowUpRight, Codeforces, LeetCode } from './ui/Icons'
+
+function CountUp({ to, run }) {
+  const [value, setValue] = useState(0)
+
+  useEffect(() => {
+    if (!run || !to) return undefined
+    let frame
+    const start = performance.now()
+    const tick = (now) => {
+      const t = Math.min((now - start) / 1600, 1)
+      setValue(Math.round(to * (1 - Math.pow(1 - t, 4))))
+      if (t < 1) frame = requestAnimationFrame(tick)
+    }
+    frame = requestAnimationFrame(tick)
+    return () => cancelAnimationFrame(frame)
+  }, [run, to])
+
+  return value
+}
 
 export default function CompetitiveProgramming({ competitiveProgramming }) {
-  const [ref, visible] = useScrollReveal()
+  const [ref, visible] = useScrollReveal({ threshold: 0.3 })
 
   if (!competitiveProgramming) return null
 
+  const cp = competitiveProgramming
   const profiles = [
-    {
+    cp.leetcode && {
       label: 'LeetCode',
-      url: competitiveProgramming.leetcode?.profile
-        ?? (competitiveProgramming.leetcode
-          ? `https://leetcode.com/u/${competitiveProgramming.leetcode.username}/`
-          : null),
-      username: competitiveProgramming.leetcode?.username,
-      rating: competitiveProgramming.leetcode?.max_rating,
+      Icon: LeetCode,
+      url: cp.leetcode.profile ?? `https://leetcode.com/u/${cp.leetcode.username}/`,
+      username: cp.leetcode.username,
+      rating: cp.leetcode.max_rating,
     },
-    {
+    cp.codeforces && {
       label: 'Codeforces',
-      url: competitiveProgramming.codeforces?.profile
-        ?? (competitiveProgramming.codeforces
-          ? `https://codeforces.com/profile/${competitiveProgramming.codeforces.username}`
-          : null),
-      username: competitiveProgramming.codeforces?.username,
-      rating: competitiveProgramming.codeforces?.max_rating,
+      Icon: Codeforces,
+      url: cp.codeforces.profile ?? `https://codeforces.com/profile/${cp.codeforces.username}`,
+      username: cp.codeforces.username,
+      rating: cp.codeforces.max_rating,
     },
-  ].filter((profile) => profile.username)
+  ].filter((p) => p?.username)
 
   if (!profiles.length) return null
 
   return (
-    <section id="competitive-programming" className="section-shell pb-12 border-t border-[var(--color-border)]">
-      <div
-        ref={ref}
-        className={`section-inner reveal-base ${visible ? 'reveal-visible' : 'reveal-hidden'}`}
-      >
-        <SectionHeading
-          eyebrow="Problem solving"
-          title="Competitive programming"
-          description="Consistent practice on algorithmic challenges."
-        />
-        <div className="grid md:grid-cols-2 gap-4">
-          {profiles.map((profile, i) => (
-            <a
-              key={profile.label}
-              href={profile.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="glass-panel rounded-2xl p-6 group hover:border-[var(--color-accent)]/25 hover:-translate-y-1 hover:shadow-[0_8px_32px_-12px_rgba(157,140,255,0.2)] transition-all duration-300 reveal-base"
-              style={{
-                opacity: visible ? 1 : 0,
-                transform: visible ? 'translateY(0)' : 'translateY(20px)',
-                transitionDelay: visible ? `${i * 100}ms` : '0ms',
-              }}
-            >
-              <div className="flex items-start justify-between gap-4">
-                <div>
-                  <h3 className="text-lg font-semibold text-white group-hover:text-[var(--color-accent-fg)] transition-colors">
-                    {profile.label}
-                  </h3>
-                  <p className="text-[var(--color-muted)] mt-1 font-mono text-sm">@{profile.username}</p>
-                </div>
-                <span className="rounded-full border border-[var(--color-border)] bg-white/[0.03] px-3 py-1 text-xs font-mono text-[var(--color-teal)] group-hover:border-[var(--color-teal)]/40 transition-colors">
-                  {profile.rating} max
-                </span>
-              </div>
-            </a>
-          ))}
+    <section className="bg-white px-4 pb-20 sm:px-6 md:pb-28">
+      <div ref={ref} className="section-inner grid gap-4 md:grid-cols-[1fr_1fr_1fr]">
+        <div className={`reveal flex flex-col justify-end ${visible ? 'is-visible' : ''}`}>
+          <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-[var(--color-faint)]">/Problem solving</p>
+          <p className="mt-3 max-w-xs text-2xl font-semibold leading-tight tracking-tight">
+            Sharpening algorithms on competitive platforms.
+          </p>
         </div>
+        {profiles.map((p, i) => (
+          <a
+            key={p.label}
+            href={p.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={`reveal group relative overflow-hidden rounded-2xl border border-[var(--color-line)] bg-[var(--color-paper)] p-6 transition-colors duration-500 hover:bg-[var(--color-ink)] hover:text-white ${
+              visible ? 'is-visible' : ''
+            }`}
+            style={{ transitionDelay: `${150 + i * 120}ms` }}
+          >
+            <div className="flex items-center justify-between">
+              <span className="inline-flex items-center gap-2 text-sm font-semibold">
+                <p.Icon /> {p.label}
+              </span>
+              <ArrowUpRight className="transition-transform duration-500 group-hover:rotate-45" />
+            </div>
+            <p className="font-wide mt-10 text-6xl font-extrabold tracking-tight tabular-nums">
+              <CountUp to={p.rating} run={visible} />
+            </p>
+            <p className="mt-2 text-sm text-[var(--color-muted)] transition-colors group-hover:text-white/60">
+              Max rating · @{p.username}
+            </p>
+          </a>
+        ))}
       </div>
     </section>
   )

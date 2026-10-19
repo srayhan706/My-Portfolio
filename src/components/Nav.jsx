@@ -1,27 +1,19 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
+import { ArrowUpRight, Close } from './ui/Icons'
 
-const links = [
-  { href: '#about', label: 'About' },
-  { href: '#experience', label: 'Experience' },
-  { href: '#projects', label: 'Projects' },
-  { href: '#skills', label: 'Skills' },
-  { href: '#research', label: 'Research' },
-  { href: '#education', label: 'Education' },
-  { href: '#contact', label: 'Contact' },
-]
-
-export default function Nav({ resumeHref }) {
+export default function Nav({ data, availability }) {
   const [open, setOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
-  const [active, setActive] = useState('#about')
-  const [mounted, setMounted] = useState(false)
-  const [pill, setPill] = useState({ left: 0, width: 0, ready: false })
-  const navListRef = useRef(null)
+  const [active, setActive] = useState('')
 
-  useEffect(() => {
-    const t = setTimeout(() => setMounted(true), 60)
-    return () => clearTimeout(t)
-  }, [])
+  const count = (v) => (Array.isArray(v) ? v.length : v ? 1 : 0)
+  const links = [
+    { href: '#work', label: 'Work', meta: count(data?.projects) },
+    { href: '#stack', label: 'Stack', meta: Object.keys(data?.skills ?? {}).length },
+    { href: '#experience', label: 'Experience', meta: count(data?.experience) + count(data?.education) },
+    { href: '#research', label: 'Research', meta: count(data?.research) },
+    { href: '#contact', label: 'Contact' },
+  ]
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24)
@@ -31,199 +23,144 @@ export default function Nav({ resumeHref }) {
   }, [])
 
   useEffect(() => {
-    const sectionIds = links.map((l) => l.href.slice(1))
-    const sections = sectionIds.map((id) => document.getElementById(id)).filter(Boolean)
+    const sections = ['work', 'stack', 'experience', 'research', 'contact']
+      .map((id) => document.getElementById(id))
+      .filter(Boolean)
     if (!sections.length) return undefined
-
     const observer = new IntersectionObserver(
       (entries) => {
-        const visible = entries
-          .filter((e) => e.isIntersecting)
-          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0]
-        if (visible?.target?.id) setActive(`#${visible.target.id}`)
+        entries.forEach((e) => {
+          if (e.isIntersecting) setActive(`#${e.target.id}`)
+        })
       },
-      { rootMargin: '-40% 0px -45% 0px', threshold: [0.12, 0.35, 0.6] },
+      { rootMargin: '-45% 0px -50% 0px' },
     )
     sections.forEach((el) => observer.observe(el))
     return () => observer.disconnect()
   }, [])
 
-  // Track sliding pill position
-  useEffect(() => {
-    const nav = navListRef.current
-    if (!nav || !mounted) return
-    const el = nav.querySelector(`a[href="${active}"]`)
-    if (!el) return
-    const navRect = nav.getBoundingClientRect()
-    const elRect = el.getBoundingClientRect()
-    setPill({ left: elRect.left - navRect.left, width: elRect.width, ready: true })
-  }, [active, mounted])
-
   useEffect(() => {
     document.body.style.overflow = open ? 'hidden' : ''
-    return () => { document.body.style.overflow = '' }
+    return () => {
+      document.body.style.overflow = ''
+    }
   }, [open])
 
-  const closeMenu = () => setOpen(false)
+  const close = () => setOpen(false)
 
   return (
     <>
       <a
-        href="#about"
-        className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[100] focus:rounded-lg focus:bg-black focus:px-4 focus:py-2"
+        href="#top"
+        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-full focus:bg-white focus:px-4 focus:py-2"
       >
         Skip to content
       </a>
 
       <nav
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-          scrolled
-            ? 'bg-[rgba(6,6,8,0.90)] backdrop-blur-xl border-b border-[var(--color-border)] shadow-[0_4px_24px_-8px_rgba(0,0,0,0.6)]'
-            : 'bg-transparent border-b border-transparent'
+        className={`fixed inset-x-0 top-0 z-50 transition-all duration-500 ${
+          scrolled ? 'bg-[var(--color-paper)]/80 backdrop-blur-xl shadow-[0_1px_0_var(--color-line)]' : ''
         }`}
       >
-        <div className="max-w-5xl mx-auto px-5 sm:px-6 h-[4rem] flex items-center justify-between gap-4">
-
-          {/* Logo */}
-          <a
-            href="#about"
-            className={`font-display text-xl font-semibold text-white tracking-tight hover:text-[var(--color-accent-fg)] transition-colors ${
-              mounted ? 'animate-slide-down' : 'opacity-0'
-            }`}
-          >
-            S. Rayhan
+        <div
+          className={`mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 sm:px-6 transition-all duration-500 ${
+            scrolled ? 'h-16' : 'h-20 md:h-24'
+          }`}
+        >
+          <a href="#top" className="pill !py-1.5 !text-[13px] animate-slide-down">
+            <span className="live-dot" />
+            {availability}
           </a>
 
-          {/* Desktop nav with sliding pill */}
-          <ul ref={navListRef} className="hidden lg:flex items-center gap-0.5 relative">
-            {/* Animated sliding indicator */}
-            {pill.ready && (
-              <span
-                aria-hidden
-                className="absolute top-1/2 -translate-y-1/2 rounded-md bg-[var(--color-accent-soft)] pointer-events-none"
-                style={{
-                  left: pill.left,
-                  width: pill.width,
-                  height: '34px',
-                  transition: 'left 0.32s cubic-bezier(0.22,1,0.36,1), width 0.32s cubic-bezier(0.22,1,0.36,1)',
-                }}
-              />
-            )}
-
-            {links.map(({ href, label }, i) => (
-              <li key={href}>
-                <a
-                  href={href}
-                  className={`relative z-10 px-3 py-2 rounded-md text-sm transition-colors ${
-                    active === href ? 'text-white' : 'text-[var(--color-muted)] hover:text-white'
-                  } ${mounted ? 'animate-slide-down' : 'opacity-0'}`}
-                  style={{ animationDelay: `${i * 50 + 80}ms` }}
-                >
-                  {label}
+          <ul className="hidden lg:flex items-center gap-10">
+            {links.map(({ href, label, meta }, i) => (
+              <li key={href} className="animate-slide-down" style={{ animationDelay: `${80 + i * 60}ms` }}>
+                <a href={href} className="group relative flex items-baseline gap-1.5 text-[15px] font-medium">
+                  <span className="relative">
+                    {label}
+                    <span
+                      className={`absolute -bottom-1 left-0 h-px bg-current transition-all duration-500 ease-out-expo ${
+                        active === href ? 'w-full' : 'w-0 group-hover:w-full'
+                      }`}
+                    />
+                  </span>
+                  {meta > 0 && (
+                    <span className="font-mono text-[11px] text-[var(--color-faint)]">[{meta}]</span>
+                  )}
                 </a>
               </li>
             ))}
           </ul>
 
-          {/* Right actions */}
-          <div
-            className={`flex items-center gap-2 ${mounted ? 'animate-slide-down' : 'opacity-0'}`}
-            style={{ animationDelay: '480ms' }}
-          >
-            {resumeHref && (
-              <a
-                href={resumeHref}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="hidden sm:inline-flex btn-primary !py-2 !px-4 !text-xs"
-              >
-                Download CV
-              </a>
-            )}
+          <div className="flex items-center gap-2 animate-slide-down" style={{ animationDelay: '420ms' }}>
+            <a href="#contact" className="btn-dark hidden sm:inline-flex !py-2.5">
+              Let&apos;s Talk
+              <ArrowUpRight className="arrow" />
+            </a>
             <button
               type="button"
-              className="lg:hidden inline-flex h-9 w-9 items-center justify-center rounded-md border border-[var(--color-border)] text-white hover:bg-white/[0.05] transition"
+              className="lg:hidden inline-flex h-10 w-10 items-center justify-center rounded-full bg-[var(--color-ink)] text-white"
               aria-expanded={open}
               aria-controls="mobile-nav"
               onClick={() => setOpen((v) => !v)}
             >
               <span className="sr-only">{open ? 'Close menu' : 'Open menu'}</span>
-              <span
-                className="transition-all duration-200"
-                style={{ display: 'inline-flex', transform: open ? 'rotate(90deg)' : 'rotate(0deg)' }}
-              >
-                {open ? (
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden>
-                    <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-                  </svg>
-                ) : (
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden>
-                    <path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-                  </svg>
-                )}
-              </span>
+              {open ? (
+                <Close size={18} />
+              ) : (
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden>
+                  <path d="M4 9h16M4 15h16" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+                </svg>
+              )}
             </button>
           </div>
         </div>
       </nav>
 
-      {/* Mobile menu */}
       <div
         id="mobile-nav"
-        className={`lg:hidden fixed inset-0 z-40 transition-opacity duration-300 ${
-          open ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
+        className={`lg:hidden fixed inset-0 z-40 bg-[var(--color-ink)] text-white transition-[clip-path] duration-700 ease-out-expo ${
+          open ? '[clip-path:circle(150%_at_100%_0)]' : '[clip-path:circle(0%_at_100%_0)] pointer-events-none'
         }`}
       >
-        <button
-          type="button"
-          className="absolute inset-0 bg-black/75 backdrop-blur-sm"
-          aria-label="Close menu overlay"
-          onClick={closeMenu}
-        />
-        <div
-          className={`absolute top-[4rem] left-0 right-0 border-b border-[var(--color-border)] bg-[var(--color-ink-elevated)] p-4 transition-transform duration-300 ${
-            open ? 'translate-y-0' : '-translate-y-4'
-          }`}
-        >
-          <ul className="space-y-0.5">
-            {links.map(({ href, label }, i) => (
-              <li key={href}>
-                <a
-                  href={href}
-                  onClick={closeMenu}
-                  className={`block rounded-lg px-3 py-2.5 text-base transition-all duration-200 ${
-                    active === href
-                      ? 'bg-[var(--color-accent-soft)] text-white'
-                      : 'text-[var(--color-muted)] hover:text-white hover:bg-white/[0.04]'
-                  }`}
-                  style={{
-                    opacity: open ? 1 : 0,
-                    transform: open ? 'translateX(0)' : 'translateX(-8px)',
-                    transitionDelay: open ? `${i * 35}ms` : '0ms',
-                  }}
-                >
-                  {label}
-                </a>
-              </li>
-            ))}
-          </ul>
-          {resumeHref && (
-            <a
-              href={resumeHref}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={closeMenu}
-              className="mt-3 flex w-full items-center justify-center btn-primary transition-all duration-300"
+        <ul className="flex h-full flex-col justify-center gap-2 px-6">
+          {links.map(({ href, label, meta }, i) => (
+            <li
+              key={href}
+              className="transition-all duration-700 ease-out-expo"
               style={{
                 opacity: open ? 1 : 0,
-                transform: open ? 'translateY(0)' : 'translateY(6px)',
-                transitionDelay: open ? `${links.length * 35}ms` : '0ms',
+                transform: open ? 'none' : 'translateY(24px)',
+                transitionDelay: open ? `${150 + i * 60}ms` : '0ms',
               }}
             >
-              Download CV
-            </a>
+              <a
+                href={href}
+                onClick={close}
+                className="flex items-baseline gap-3 border-b border-[var(--color-line-dark)] py-4 text-4xl font-semibold uppercase tracking-tight"
+              >
+                {label}
+                {meta > 0 && <span className="font-mono text-sm text-white/40">[{meta}]</span>}
+              </a>
+            </li>
+          ))}
+          {data?.contact?.resume && (
+            <li
+              className="mt-6 transition-all duration-700"
+              style={{ opacity: open ? 1 : 0, transitionDelay: open ? '500ms' : '0ms' }}
+            >
+              <a
+                href={data.contact.resume}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={close}
+                className="inline-flex items-center gap-2 rounded-full bg-white px-5 py-3 text-sm font-semibold text-[var(--color-ink)]"
+              >
+                Download CV <ArrowUpRight />
+              </a>
+            </li>
           )}
-        </div>
+        </ul>
       </div>
     </>
   )
