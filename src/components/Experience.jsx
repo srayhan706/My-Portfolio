@@ -1,12 +1,18 @@
+import { useScrollReveal } from '../hooks/useScrollReveal'
 import SectionHeading from './ui/SectionHeading'
 
 export default function Experience({ experience }) {
   const entries = Array.isArray(experience) ? experience : experience ? [experience] : []
+  const [ref, visible] = useScrollReveal()
+
   if (!entries.length) return null
 
   return (
     <section id="experience" className="section-shell border-t border-[var(--color-border)]">
-      <div className="section-inner">
+      <div
+        ref={ref}
+        className={`section-inner reveal-base ${visible ? 'reveal-visible' : 'reveal-hidden'}`}
+      >
         <SectionHeading
           eyebrow="Experience"
           title="Where I build professionally"
@@ -16,7 +22,10 @@ export default function Experience({ experience }) {
           {entries.map((entry, index) => (
             <article
               key={`${entry.role}-${entry.organization}`}
-              className="glass-panel rounded-2xl p-6 md:p-8 relative overflow-hidden"
+              className="glass-panel rounded-xl p-6 md:p-8 relative overflow-hidden group hover:border-[var(--color-border-strong)] hover:shadow-[0_8px_32px_-16px_rgba(157,140,255,0.18)] transition-all duration-300"
+              style={{
+                transitionDelay: visible ? `${index * 80}ms` : '0ms',
+              }}
             >
               <div
                 className="absolute top-0 left-0 h-full w-1 bg-gradient-to-b from-[var(--color-accent)] to-[var(--color-teal)]/60"
@@ -27,7 +36,9 @@ export default function Experience({ experience }) {
                   <p className="text-[11px] font-mono uppercase tracking-widest text-[var(--color-muted)] mb-2">
                     {String(index + 1).padStart(2, '0')}
                   </p>
-                  <h3 className="text-xl font-semibold text-white">{entry.role}</h3>
+                  <h3 className="text-xl font-semibold text-white group-hover:text-[var(--color-accent-fg)] transition-colors">
+                    {entry.role}
+                  </h3>
                   <p className="text-[var(--color-accent)] mt-1 font-medium">{entry.organization}</p>
                   {entry.location && (
                     <p className="text-sm text-[var(--color-muted)] mt-1">{entry.location}</p>

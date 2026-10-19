@@ -2,139 +2,166 @@ export default function Hero({ about, contact, experience }) {
   if (!about) return null
 
   const role = experience?.[0]
-  const quickLinks = [
-    contact?.email && {
-      label: 'Email',
-      href: `mailto:${contact.email}`,
-      value: contact.email,
-    },
-    contact?.linkedin && { label: 'LinkedIn', href: contact.linkedin, value: 'Profile' },
-    contact?.github && { label: 'GitHub', href: contact.github, value: '@srayhan706' },
-  ].filter(Boolean)
 
   return (
     <section
       id="about"
       className="relative min-h-[92vh] flex items-center section-shell pt-32 pb-16 md:pt-36 overflow-hidden"
     >
-      <div
-        className="pointer-events-none absolute inset-0 -z-10"
-        aria-hidden
-      >
-        <div className="absolute top-[-20%] left-[-10%] h-[520px] w-[520px] rounded-full bg-[var(--color-accent-glow)] blur-[120px] opacity-25" />
-        <div className="absolute bottom-[-10%] right-[-5%] h-[420px] w-[420px] rounded-full bg-[var(--color-teal)] blur-[130px] opacity-[0.12]" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(255,255,255,0.04),transparent_55%)]" />
-      </div>
-
       <div className="section-inner w-full">
-        <div className="grid items-center gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:gap-16 animate-fade-up">
-          <div className="order-2 lg:order-1">
+        <div className="grid items-center gap-12 lg:grid-cols-[1.05fr_0.95fr] lg:gap-14">
+
+          {/* Left column */}
+          <div className="order-2 lg:order-1 border-l border-[var(--color-border-strong)] pl-6 md:pl-8">
+
             {role && (
-              <div className="inline-flex items-center gap-2 rounded-full border border-[var(--color-border)] bg-white/[0.03] px-3 py-1.5 mb-6">
-                <span className="relative flex h-2 w-2">
-                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-40" />
-                  <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-400" />
-                </span>
+              <div
+                className="inline-flex items-center gap-2 rounded-md border border-[var(--color-border)] bg-[var(--color-surface)] px-3 py-1.5 mb-6 animate-fade-up"
+                style={{ animationDelay: '0ms' }}
+              >
+                <span className="h-1.5 w-1.5 rounded-full bg-[var(--color-teal)] animate-pulse" />
                 <span className="text-xs text-[var(--color-muted)]">
                   {role.role} · {role.organization}
                 </span>
               </div>
             )}
 
-            <p className="text-sm font-medium tracking-wide text-[var(--color-teal)] mb-3">
-              Software engineer · Dhaka, Bangladesh
+            <p
+              className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--color-muted)] mb-4 animate-fade-up"
+              style={{ animationDelay: '80ms' }}
+            >
+              Dhaka, Bangladesh
             </p>
-            <h1 className="font-display text-[2.35rem] sm:text-5xl lg:text-[3.35rem] leading-[1.08] font-medium text-white tracking-tight text-balance">
+
+            <h1
+              className="font-display text-[2.5rem] sm:text-5xl lg:text-[3.5rem] leading-[1.05] font-semibold text-white tracking-tight text-balance animate-fade-up"
+              style={{ animationDelay: '160ms' }}
+            >
               {about.name}
             </h1>
-            <p className="mt-4 text-xl sm:text-2xl text-gradient-gold font-display">{about.title}</p>
 
-            <p className="mt-6 text-lg text-[#d4d4dc] leading-relaxed max-w-xl">{about.tagline}</p>
-            <p className="mt-4 text-[var(--color-muted)] leading-relaxed max-w-xl text-[15px] sm:text-base">
+            <p
+              className="mt-3 text-2xl sm:text-3xl text-gradient-display font-display italic animate-fade-up"
+              style={{ animationDelay: '260ms' }}
+            >
+              {about.title}
+            </p>
+
+            <p
+              className="mt-6 text-lg text-[#d8d8e0] leading-relaxed max-w-xl animate-fade-up"
+              style={{ animationDelay: '360ms' }}
+            >
+              {about.tagline}
+            </p>
+
+            <p
+              className="mt-4 text-[var(--color-muted)] leading-relaxed max-w-xl text-[15px] sm:text-base animate-fade-up"
+              style={{ animationDelay: '440ms' }}
+            >
               {about.summary}
             </p>
 
-            <div className="mt-9 flex flex-wrap gap-3">
+            <div
+              className="mt-8 pt-6 border-t border-[var(--color-border)] max-w-xl animate-fade-up"
+              style={{ animationDelay: '540ms' }}
+            >
               <a
                 href="#projects"
-                className="inline-flex items-center justify-center rounded-full bg-[var(--color-accent)] px-6 py-3 text-sm font-semibold text-[#1a160c] hover:brightness-110 transition"
+                className="inline-block text-[15px] font-semibold text-white border-b border-[var(--color-accent)] pb-0.5 hover:text-[var(--color-accent-fg)] transition-colors"
               >
-                View featured work
+                See projects
               </a>
-              {contact?.resume && (
-                <a
-                  href={contact.resume}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center justify-center rounded-full border border-[var(--color-border-strong)] px-6 py-3 text-sm font-medium text-white hover:bg-white/[0.04] transition"
-                >
-                  Open résumé
-                </a>
-              )}
-              <a
-                href="#contact"
-                className="inline-flex items-center justify-center rounded-full px-6 py-3 text-sm font-medium text-[var(--color-muted)] hover:text-white transition"
-              >
-                Contact →
-              </a>
-            </div>
 
-            {quickLinks.length > 0 && (
-              <dl className="mt-10 grid grid-cols-1 sm:grid-cols-3 gap-3 max-w-xl">
-                {quickLinks.map((item) => (
-                  <div
-                    key={item.label}
-                    className="rounded-2xl border border-[var(--color-border)] bg-white/[0.02] px-4 py-3"
-                  >
-                    <dt className="text-[10px] uppercase tracking-[0.18em] text-[var(--color-muted)]">
-                      {item.label}
-                    </dt>
-                    <dd className="mt-1 text-sm truncate">
-                      <a
-                        href={item.href}
-                        target={item.href.startsWith('http') ? '_blank' : undefined}
-                        rel={item.href.startsWith('http') ? 'noopener noreferrer' : undefined}
-                        className="text-white/90 hover:text-[var(--color-accent)] transition-colors"
-                      >
-                        {item.value}
-                      </a>
-                    </dd>
-                  </div>
-                ))}
-              </dl>
-            )}
+              <ul className="mt-4 space-y-1.5 text-sm">
+                {contact?.email && (
+                  <li>
+                    <span className="text-[var(--color-muted)] w-14 inline-block">Email</span>
+                    <a
+                      href={`mailto:${contact.email}`}
+                      className="text-white/90 hover:text-white break-all sm:break-normal"
+                    >
+                      {contact.email}
+                    </a>
+                  </li>
+                )}
+                {contact?.resume && (
+                  <li>
+                    <span className="text-[var(--color-muted)] w-14 inline-block">Resume</span>
+                    <a
+                      href={contact.resume}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-white/90 hover:text-white underline-offset-2 hover:underline"
+                    >
+                      PDF download
+                    </a>
+                  </li>
+                )}
+                {contact?.linkedin && (
+                  <li>
+                    <span className="text-[var(--color-muted)] w-14 inline-block">Social</span>
+                    <a
+                      href={contact.linkedin}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-white/90 hover:text-white underline-offset-2 hover:underline"
+                    >
+                      LinkedIn
+                    </a>
+                    {contact.github && (
+                      <>
+                        <span className="text-[var(--color-muted)] mx-2">·</span>
+                        <a
+                          href={contact.github}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-white/90 hover:text-white underline-offset-2 hover:underline"
+                        >
+                          GitHub
+                        </a>
+                      </>
+                    )}
+                  </li>
+                )}
+              </ul>
+            </div>
           </div>
 
-          <div className="order-1 lg:order-2 flex justify-center lg:justify-end">
-            <div className="relative w-full max-w-[22rem]">
+          {/* Right column — photo */}
+          <div
+            className="order-1 lg:order-2 flex justify-center lg:justify-end animate-fade-up"
+            style={{ animationDelay: '200ms' }}
+          >
+            <div className="relative w-full max-w-[21rem]">
               <div
-                className="absolute -inset-3 rounded-[2rem] bg-gradient-to-br from-[var(--color-accent)]/25 via-transparent to-[var(--color-teal)]/20 blur-2xl"
+                className="absolute -inset-1 rounded-xl bg-gradient-to-br from-[var(--color-accent)]/30 to-[var(--color-teal)]/10 blur-sm"
                 aria-hidden
               />
-              <div className="relative glass-panel rounded-[2rem] p-3 md:p-4">
-                <div className="overflow-hidden rounded-[1.4rem] border border-[var(--color-border)] bg-[var(--color-surface)]">
+              <div className="relative glass-panel rounded-xl p-2 hover:shadow-[0_0_40px_-12px_rgba(157,140,255,0.3)] transition-shadow duration-500">
+                <div className="overflow-hidden rounded-lg border border-[var(--color-border)]">
                   <img
                     src="/f.png"
                     alt="Portrait of Md Shariful Islam Rayhan"
-                    className="aspect-[4/5] w-full object-cover object-top"
+                    className="aspect-[4/5] w-full object-cover object-top grayscale-[15%] contrast-[1.02] hover:grayscale-0 transition-all duration-700"
                     width={440}
                     height={550}
                   />
                 </div>
-                <div className="absolute -bottom-4 left-6 right-6 glass-panel rounded-2xl px-4 py-3 flex items-center justify-between gap-3">
+                <div className="mt-3 flex items-center justify-between gap-3 px-1">
                   <div>
-                    <p className="text-xs text-[var(--color-muted)]">Currently</p>
+                    <p className="text-[10px] uppercase tracking-wider text-[var(--color-muted)]">Now</p>
                     <p className="text-sm font-medium text-white truncate">
-                      {role?.organization ?? 'Open to opportunities'}
+                      {role?.organization ?? 'Available'}
                     </p>
                   </div>
-                  <span className="shrink-0 rounded-full bg-emerald-500/15 px-2.5 py-1 text-[11px] font-medium text-emerald-300">
+                  <span className="rounded-md bg-[var(--color-accent-soft)] px-2 py-1 text-[10px] font-medium text-[var(--color-accent-fg)]">
                     Active
                   </span>
                 </div>
               </div>
             </div>
           </div>
+
         </div>
       </div>
     </section>
