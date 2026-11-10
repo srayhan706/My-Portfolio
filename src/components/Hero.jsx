@@ -1,159 +1,128 @@
-import { Codeforces, FileText, GitHub, LeetCode, LinkedIn, Mail, MapPin } from './ui/Icons'
-import { splitName } from '../utils/name'
+import { asList, shortOrg } from '../utils/format'
+import { ArrowUpRight, Codeforces, Download, GitHub, LeetCode, LinkedIn, Mail, MapPin } from './ui/Icons'
 
-function Words({ text, start = 0, step = 90 }) {
-  return text.split(' ').map((w, i) => (
-    <span key={i} className="inline-block animate-rise" style={{ animationDelay: `${start + i * step}ms` }}>
-      {w}
-      {' '}
-    </span>
-  ))
-}
-
-export default function Hero({ about, contact, experience, skills }) {
+export default function Hero({ about, contact, experience, education, skills }) {
   if (!about) return null
 
-  const role = Array.isArray(experience) ? experience[0] : experience
-  const shortName = splitName(about.name).join(' ')
-  const headlineRole = about.title.replace(/^junior\s+/i, '').toLowerCase()
-  const stack = [
-    ...(skills?.backend ?? []),
-    ...(skills?.frontend ?? []),
-    ...(skills?.devops ?? []),
-    ...(skills?.databases ?? []),
-  ]
+  const role = asList(experience)[0]
+  const degree = asList(education)[0]
+  const location = about.location ?? role?.location
+  const portraitAlt = `Portrait of ${about.full_name ?? about.name}`
 
   const socials = [
-    contact?.github && { href: contact.github, label: 'GitHub', Icon: GitHub, color: '#181717' },
-    contact?.linkedin && { href: contact.linkedin, label: 'LinkedIn', Icon: LinkedIn, color: '#0a66c2' },
-    contact?.leetcode && { href: contact.leetcode, label: 'LeetCode', Icon: LeetCode, color: '#f89f1b' },
-    contact?.codeforces && { href: contact.codeforces, label: 'Codeforces', Icon: Codeforces, color: '#1f8acb' },
-    contact?.email && { href: `mailto:${contact.email}`, label: 'Email', Icon: Mail, color: '#139fb1' },
-    contact?.resume && { href: contact.resume, label: 'Résumé', Icon: FileText, color: '#e0457b' },
+    contact?.github && { href: contact.github, label: 'GitHub', Icon: GitHub },
+    contact?.linkedin && { href: contact.linkedin, label: 'LinkedIn', Icon: LinkedIn },
+    contact?.leetcode && { href: contact.leetcode, label: 'LeetCode', Icon: LeetCode },
+    contact?.codeforces && { href: contact.codeforces, label: 'Codeforces', Icon: Codeforces },
+    contact?.email && { href: `mailto:${contact.email}`, label: 'Email', Icon: Mail },
+  ].filter(Boolean)
+
+  const stack = [skills?.programming_languages?.[0], skills?.backend?.[0]].filter(Boolean)
+  const stackMore = [skills?.databases?.[0], ...(skills?.devops ?? []).slice(0, 1), skills?.frontend?.[1]].filter(Boolean)
+
+  const facts = [
+    role && { label: 'Currently', value: role.role, sub: role.organization },
+    degree && { label: 'Education', value: degree.degree, sub: degree.institution },
+    stack.length > 0 && { label: 'Core stack', value: stack.join(' · '), sub: stackMore.join(' · ') },
+    location && { label: 'Based in', value: location, sub: about.timezone },
   ].filter(Boolean)
 
   return (
-    <section id="top" className="shell grid items-center gap-12 pb-14 pt-12 md:pt-20 lg:grid-cols-[1fr_1.08fr] lg:gap-10 lg:pb-20">
-      <div>
-        <span className="inline-flex items-center gap-2 rounded-full bg-[var(--color-teal-soft)] px-3.5 py-1.5 text-xs font-medium uppercase tracking-wide text-[var(--color-teal)] animate-rise">
-          <span className="h-1.5 w-1.5 rounded-full bg-[var(--color-teal)]" />
-          {about.availability ?? 'Open to opportunities'}
-        </span>
-        <h1 className="mt-6 text-[3.25rem] font-medium leading-[0.92] tracking-[-0.035em] sm:text-[4.5rem] lg:text-[5.25rem]">
-          <Words text="Hi, I’m a" start={100} />
-          <br />
-          <Words text={headlineRole} start={370} />
-          <sup className="ml-[-0.15em] inline-block align-[0.9em] text-[0.32em] font-normal animate-rise" style={{ animationDelay: '700ms' }}>
-            ©
-          </sup>
-        </h1>
-        <p className="mt-8 max-w-md text-[15px] leading-snug text-[var(--color-muted)] animate-rise" style={{ animationDelay: '800ms' }}>
-          {about.tagline}
-        </p>
-        <div className="mt-10 flex flex-wrap items-center gap-3 animate-rise" style={{ animationDelay: '900ms' }}>
-          <a href="#contact" className="btn-dark">
-            Contact Me
-          </a>
-          {contact?.resume && (
-            <a
-              href={contact.resume}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="rounded-full px-5 py-3 text-[15px] font-medium text-[var(--color-muted)] transition-colors hover:text-[var(--color-ink)]"
-            >
-              Download CV ↗
-            </a>
-          )}
-        </div>
-      </div>
+    <section id="top" className="relative">
+      <div aria-hidden className="dot-grid pointer-events-none absolute inset-x-0 top-0 h-[34rem]" />
 
-      {/* Bento */}
-      <div className="grid grid-cols-2 gap-3">
-        <div className="card relative flex min-h-[15rem] flex-col overflow-hidden p-4 sm:p-5 animate-rise" style={{ animationDelay: '250ms' }}>
-          <p className="text-lg font-medium tracking-tight sm:text-xl">{shortName}</p>
-          {role?.location && (
-            <p className="mt-0.5 flex items-center gap-1 text-[13px] text-[var(--color-muted)]">
-              <MapPin size={13} />
-              {role.location}
-            </p>
-          )}
-          {/* mini preview */}
-          <div className="pointer-events-none absolute -right-6 top-[38%] hidden sm:block w-[78%] rotate-[-4deg] rounded-xl border border-[var(--color-line)] bg-[#f7f7f9] p-2.5 shadow-[0_18px_30px_-18px_rgba(0,0,0,0.35)]">
-            <div className="mb-2 flex gap-1">
-              {[0, 1, 2].map((d) => (
-                <span key={d} className="h-1.5 w-1.5 rounded-full bg-black/15" />
-              ))}
-            </div>
-            <p className="font-mono text-[9px] leading-relaxed text-[var(--color-muted)]">
-              <span className="text-[var(--color-teal)]">@GetMapping</span>(&quot;/api&quot;)
-              <br />
-              <span className="text-[#7c6cf0]">public</span> Response serve()
-            </p>
-          </div>
-          <div className="relative mt-auto flex flex-col items-start gap-2 pt-6 sm:pt-24">
-            {role && (
-              <span className="inline-flex items-center gap-1.5 rounded-full bg-[#efefef]/95 px-3 py-1.5 text-[11px] font-medium uppercase tracking-wide backdrop-blur">
-                {role.role}
-              </span>
-            )}
-            {role?.organization && (
-              <span className="rounded-full bg-[#eaf1ff] px-3 py-1.5 text-[11px] font-medium text-[#2f6fd6]">
-                @ {role.organization.replace(/^.*\((.+)\)$/, '$1')}
-              </span>
-            )}
-          </div>
-        </div>
-
-        <div className="card overflow-hidden animate-rise" style={{ animationDelay: '350ms' }}>
+      <div className="shell relative grid items-center gap-12 pb-14 pt-12 md:pt-20 lg:grid-cols-[1fr_340px] lg:gap-20 lg:pb-20">
+        <div>
           <img
             src="/f.png"
-            alt={`Portrait of ${about.name}`}
-            width={500}
-            height={500}
-            className="h-full min-h-[15rem] w-full object-cover object-top transition-transform duration-700 hover:scale-105"
+            alt={portraitAlt}
+            width={72}
+            height={72}
+            className="animate-rise mb-7 h-[72px] w-[72px] rounded-full border border-line bg-white object-cover object-top lg:hidden"
           />
-        </div>
 
-        <div className="col-span-2 grid gap-3 sm:grid-cols-[1.45fr_1fr]">
-          <div
-            className="relative overflow-hidden rounded-[24px] bg-[linear-gradient(110deg,#9f9bf5,#c4c1fb_70%,#d8d6fd)] p-5 text-white animate-rise"
-            style={{ animationDelay: '450ms' }}
-          >
-            <p className="max-w-[16rem] text-sm leading-snug">
-              The technologies I happily
-              <br />
-              work with &lt;3
+          {(about.availability || role) && (
+            <p className="animate-rise inline-flex items-center gap-2.5 rounded-full border border-line bg-surface py-1.5 pl-3 pr-4 text-[13px] text-muted">
+              <span className="relative flex h-2 w-2">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-positive opacity-60" />
+                <span className="relative inline-flex h-2 w-2 rounded-full bg-positive" />
+              </span>
+              {about.availability ?? (
+                <span>
+                  {role.role} at <span className="font-medium text-ink">{shortOrg(role.organization)}</span>
+                </span>
+              )}
             </p>
-            <div className="mt-5 overflow-hidden [mask-image:linear-gradient(90deg,transparent,#000_12%,#000_88%,transparent)]">
-              <div className="flex w-max gap-6 animate-marquee">
-                {[...stack, ...stack].map((s, i) => (
-                  <span key={i} className="whitespace-nowrap text-lg font-semibold tracking-tight">
-                    {s}
-                  </span>
-                ))}
-              </div>
-            </div>
+          )}
+
+          <h1 className="animate-rise mt-6 text-[2.3rem] font-semibold leading-[1.02] tracking-[-0.04em] sm:text-6xl lg:text-[4.5rem]" style={{ '--i': 1 }}>
+            {about.name}
+            <span className="block text-faint">{about.title}.</span>
+          </h1>
+
+          <p className="animate-rise mt-6 max-w-xl text-lg leading-relaxed text-muted" style={{ '--i': 2 }}>
+            {about.tagline}
+          </p>
+
+          <div className="animate-rise mt-9 flex flex-wrap items-center gap-3" style={{ '--i': 3 }}>
+            <a href="#contact" className="btn btn-primary">
+              Get in touch
+              <ArrowUpRight size={15} />
+            </a>
+            {contact?.resume && (
+              <a href={contact.resume} target="_blank" rel="noopener noreferrer" className="btn btn-ghost">
+                <Download size={15} />
+                Download CV
+              </a>
+            )}
           </div>
 
-          <ul className="grid grid-cols-6 gap-2 sm:grid-cols-3">
-            {socials.map((s, i) => (
-              <li key={s.label} className="animate-rise" style={{ animationDelay: `${550 + i * 70}ms` }}>
-                <a
-                  href={s.href}
-                  target={s.href.startsWith('http') || s.href.endsWith('.pdf') ? '_blank' : undefined}
-                  rel="noopener noreferrer"
-                  aria-label={s.label}
-                  title={s.label}
-                  className="grid aspect-square place-items-center rounded-full bg-white shadow-[0_8px_18px_-12px_rgba(0,0,0,0.35)] transition-transform duration-300 hover:-translate-y-1 hover:scale-105"
-                  style={{ color: s.color }}
-                >
-                  <s.Icon size={20} />
-                </a>
-              </li>
-            ))}
-          </ul>
+          {socials.length > 0 && (
+            <ul className="animate-rise mt-9 flex flex-wrap items-center gap-2" style={{ '--i': 4 }}>
+              {socials.map((s) => (
+                <li key={s.label}>
+                  <a
+                    href={s.href}
+                    target={s.href.startsWith('http') ? '_blank' : undefined}
+                    rel="noopener noreferrer"
+                    aria-label={s.label}
+                    title={s.label}
+                    className="icon-btn"
+                  >
+                    <s.Icon size={17} />
+                  </a>
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
+
+        <figure className="animate-rise relative hidden lg:block" style={{ '--i': 2 }}>
+          <div className="card p-2 shadow-[0_30px_60px_-40px_rgba(14,17,22,0.45)]">
+            <img src="/f.png" alt={portraitAlt} width={500} height={500} className="aspect-square w-full rounded-xl bg-white object-cover object-top" />
+          </div>
+          {location && (
+            <figcaption className="card absolute -bottom-4 -left-5 flex items-center gap-2 px-3.5 py-2 text-[13px] font-medium shadow-[0_14px_30px_-18px_rgba(14,17,22,0.45)]">
+              <MapPin size={14} className="text-accent" />
+              {location}
+            </figcaption>
+          )}
+        </figure>
       </div>
+
+      {facts.length > 0 && (
+        <div className="shell relative pb-16 md:pb-20">
+          <dl className="animate-rise grid gap-px overflow-hidden rounded-2xl border border-line bg-line sm:grid-cols-2 lg:grid-cols-4" style={{ '--i': 5 }}>
+            {facts.map((f) => (
+              <div key={f.label} className="bg-surface p-5">
+                <dt className="eyebrow">{f.label}</dt>
+                <dd className="mt-3 text-[15px] font-medium leading-snug tracking-tight">{f.value}</dd>
+                {f.sub && <dd className="mt-1 text-[13px] leading-snug text-muted">{f.sub}</dd>}
+              </div>
+            ))}
+          </dl>
+        </div>
+      )}
     </section>
   )
 }

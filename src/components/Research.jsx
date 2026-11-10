@@ -1,59 +1,61 @@
-import { useScrollReveal } from '../hooks/useScrollReveal'
+import { pad } from '../utils/format'
 import { ArrowUpRight } from './ui/Icons'
+import Section from './ui/Section'
 
-export default function Research({ research }) {
-  const [ref, visible] = useScrollReveal({ threshold: 0.15 })
-
+export default function Research({ index, research }) {
   if (!research) return null
 
+  // "CATS: Curvature-Adaptive ..." -> acronym + full title
   const [acronym, ...rest] = research.title.split(':')
   const subtitle = rest.join(':').trim()
+  const onArxiv = /arxiv\.org/.test(research.paper_url ?? '')
 
   return (
-    <section id="research" ref={ref} className={`shell grid gap-8 py-14 md:py-20 lg:grid-cols-[230px_1fr] ${visible ? 'is-visible' : ''}`}>
-      <div>
-        <h2 className="heading-lg reveal">
-          Published
-          <br />
-          research
-        </h2>
-        <p className="reveal mt-4 max-w-[14rem] text-sm text-[var(--color-muted)]" style={{ transitionDelay: '100ms' }}>
-          Machine learning research on efficient long-video understanding.
-        </p>
-      </div>
-
-      <div className="grid gap-4 md:grid-cols-[1.3fr_1fr]">
-        <article className="card reveal flex flex-col p-6 md:p-8" style={{ transitionDelay: '150ms' }}>
-          <div className="flex flex-wrap gap-1.5">
-            {research.domain?.map((d, i) => (
-              <span key={d} className={`tag ${i === 0 ? 'tag-teal' : ''}`}>
-                {d}
-              </span>
-            ))}
-          </div>
-          <h3 className="mt-8 text-5xl font-medium tracking-[-0.04em] md:text-6xl">{subtitle ? acronym : research.title}</h3>
-          {subtitle && <p className="mt-3 text-xl font-medium leading-snug tracking-tight">{subtitle}</p>}
-          <p className="mt-4 text-[15px] leading-snug text-[var(--color-muted)]">{research.description}</p>
+    <Section id="research" index={index} title="Research" intro="Machine learning research on efficient long-video understanding.">
+      <article className="card reveal overflow-hidden">
+        <div className="p-6 md:p-8">
+          <p className="eyebrow">{onArxiv ? 'Paper · arXiv' : 'Paper'}</p>
+          <h3 className="mt-4 max-w-2xl text-2xl font-semibold leading-tight tracking-tight md:text-[1.75rem]">
+            {subtitle ? (
+              <>
+                <span className="text-accent">{acronym}:</span> {subtitle}
+              </>
+            ) : (
+              research.title
+            )}
+          </h3>
+          <p className="mt-4 max-w-2xl text-[15px] leading-relaxed text-muted">{research.description}</p>
+          {research.domain?.length > 0 && (
+            <ul className="mt-6 flex flex-wrap gap-1.5">
+              {research.domain.map((d) => (
+                <li key={d} className="tag">
+                  {d}
+                </li>
+              ))}
+            </ul>
+          )}
           {research.paper_url && (
-            <a href={research.paper_url} target="_blank" rel="noopener noreferrer" className="btn-dark mt-8 self-start">
+            <a href={research.paper_url} target="_blank" rel="noopener noreferrer" className="btn btn-primary mt-8">
               {research.paper_label ?? 'Read paper (PDF)'}
-              <ArrowUpRight />
+              <ArrowUpRight size={15} />
             </a>
           )}
-        </article>
+        </div>
 
-        <article className="lavender reveal rounded-[24px] p-6 md:p-8" style={{ transitionDelay: '280ms' }}>
-          <p className="text-sm font-medium uppercase tracking-wide text-[#5b55c9]">Key contributions</p>
-          <ol className="mt-6 space-y-5">
-            {research.highlights?.map((h, i) => (
-              <li key={h} className="flex gap-4">
-                <span className="text-lg text-[#5b55c9]">{String(i + 1).padStart(2, '0')}</span>
-                <span className="text-[15px] leading-snug text-[#3a3a4a]">{h}</span>
-              </li>
-            ))}
-          </ol>
-        </article>
-      </div>
-    </section>
+        {research.highlights?.length > 0 && (
+          <div className="border-t border-line bg-raised/50 p-6 md:p-8">
+            <p className="eyebrow">Key contributions</p>
+            <ol className="mt-5 grid gap-6 md:grid-cols-3">
+              {research.highlights.map((h, i) => (
+                <li key={h}>
+                  <span className="font-mono text-xs text-accent">{pad(i + 1)}</span>
+                  <p className="mt-2 text-sm leading-relaxed text-muted">{h}</p>
+                </li>
+              ))}
+            </ol>
+          </div>
+        )}
+      </article>
+    </Section>
   )
 }

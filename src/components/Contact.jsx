@@ -1,75 +1,93 @@
-import { useState } from 'react'
-import { useScrollReveal } from '../hooks/useScrollReveal'
+import { useEffect, useState } from 'react'
+import { prettyUrl } from '../utils/format'
+import { ArrowUpRight, Check, Codeforces, Copy, GitHub, LeetCode, LinkedIn, Mail, Phone } from './ui/Icons'
+import Section from './ui/Section'
 
-const field =
-  'w-full rounded-[18px] border border-white/70 bg-white/55 px-5 text-sm text-[var(--color-ink)] placeholder:text-[#9a98b8] outline-none backdrop-blur transition focus:border-[#9b96f2] focus:bg-white/80'
+function CopyButton({ value }) {
+  const [copied, setCopied] = useState(false)
 
-// No backend: the form composes an email in the visitor's mail app.
-export default function Contact({ contact }) {
-  const [ref, visible] = useScrollReveal({ threshold: 0.2 })
-  const [form, setForm] = useState({ name: '', email: '', message: '' })
+  useEffect(() => {
+    if (!copied) return undefined
+    const t = setTimeout(() => setCopied(false), 2000)
+    return () => clearTimeout(t)
+  }, [copied])
 
-  if (!contact?.email) return null
+  if (!navigator.clipboard) return null
 
-  const update = (key) => (e) => setForm((f) => ({ ...f, [key]: e.target.value }))
-
-  const submit = (e) => {
-    e.preventDefault()
-    const subject = `Project inquiry from ${form.name}`
-    const body = `${form.message}\n\n— ${form.name} (${form.email})`
-    window.location.href = `mailto:${contact.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`
-  }
+  const copy = () =>
+    navigator.clipboard
+      .writeText(value)
+      .then(() => setCopied(true))
+      .catch(() => {})
 
   return (
-    <section id="contact" className="shell py-8">
-      <div
-        ref={ref}
-        className={`lavender rounded-[24px] px-5 py-14 sm:px-10 md:py-20 ${visible ? 'is-visible' : ''}`}
-      >
-        <div className="mx-auto max-w-[42rem] text-center">
-          <h2 className="reveal text-[2rem] font-medium leading-[1.05] tracking-[-0.025em] md:text-[2.75rem]">
-            Contact me to sizzle your project
-          </h2>
-          <p className="reveal mt-4 text-sm text-[#55546a]" style={{ transitionDelay: '100ms' }}>
-            Feel free to reach out with questions. I&apos;m open to new roles, projects, or just a chat.
+    <button type="button" onClick={copy} className="btn btn-ghost">
+      {copied ? <Check size={15} className="text-positive" /> : <Copy size={15} />}
+      <span aria-live="polite">{copied ? 'Copied' : 'Copy email'}</span>
+    </button>
+  )
+}
+
+export default function Contact({ index, contact }) {
+  if (!contact) return null
+
+  const channels = [
+    contact.linkedin && { href: contact.linkedin, label: 'LinkedIn', value: prettyUrl(contact.linkedin), Icon: LinkedIn },
+    contact.github && { href: contact.github, label: 'GitHub', value: prettyUrl(contact.github), Icon: GitHub },
+    contact.phone && { href: `tel:${contact.phone}`, label: 'Phone', value: contact.phone, Icon: Phone },
+    contact.leetcode && { href: contact.leetcode, label: 'LeetCode', value: prettyUrl(contact.leetcode), Icon: LeetCode },
+    contact.codeforces && { href: contact.codeforces, label: 'Codeforces', value: prettyUrl(contact.codeforces), Icon: Codeforces },
+  ].filter(Boolean)
+
+  return (
+    <Section id="contact" index={index} title="Contact" intro="Open to conversations about roles, projects, and collaboration.">
+      <div className="card reveal overflow-hidden">
+        <div className="p-6 md:p-10">
+          <h3 className="max-w-lg text-3xl font-semibold leading-[1.08] tracking-[-0.03em] md:text-[2.5rem]">Let’s build something reliable together.</h3>
+          <p className="mt-4 max-w-xl text-base leading-relaxed text-muted">
+            Have a role, a project, or a question? Email is the fastest way to reach me.
           </p>
+          {contact.email && (
+            <>
+              <a
+                href={`mailto:${contact.email}`}
+                className="mt-8 inline-block break-all text-xl font-medium tracking-tight underline decoration-line decoration-1 underline-offset-8 transition-colors hover:text-accent hover:decoration-accent md:text-2xl"
+              >
+                {contact.email}
+              </a>
+              <div className="mt-7 flex flex-wrap gap-3">
+                <a href={`mailto:${contact.email}`} className="btn btn-primary">
+                  <Mail size={15} />
+                  Send an email
+                </a>
+                <CopyButton value={contact.email} />
+              </div>
+            </>
+          )}
         </div>
 
-        <form onSubmit={submit} className="mx-auto mt-10 grid max-w-[42rem] gap-4 sm:grid-cols-2">
-          <label className="reveal" style={{ transitionDelay: '200ms' }}>
-            <span className="sr-only">Name</span>
-            <input required value={form.name} onChange={update('name')} placeholder="Name" className={`${field} h-12 !rounded-full`} />
-          </label>
-          <label className="reveal" style={{ transitionDelay: '260ms' }}>
-            <span className="sr-only">Email</span>
-            <input
-              required
-              type="email"
-              value={form.email}
-              onChange={update('email')}
-              placeholder="Email"
-              className={`${field} h-12 !rounded-full`}
-            />
-          </label>
-          <label className="reveal sm:col-span-2" style={{ transitionDelay: '320ms' }}>
-            <span className="sr-only">Message</span>
-            <textarea
-              required
-              rows={5}
-              value={form.message}
-              onChange={update('message')}
-              placeholder="Work description..."
-              className={`${field} resize-none py-4`}
-            />
-          </label>
-          <div className="reveal sm:col-span-2" style={{ transitionDelay: '380ms' }}>
-            <button type="submit" className="btn-dark w-full">
-              Submit
-            </button>
-            <p className="mt-3 text-center text-xs text-[#6d6b85]">Opens your email app with the message ready to send.</p>
-          </div>
-        </form>
+        {channels.length > 0 && (
+          <ul className="grid gap-px border-t border-line bg-line sm:grid-cols-2">
+            {channels.map((c, i) => (
+              <li key={c.label} className={`bg-surface ${channels.length % 2 === 1 && i === channels.length - 1 ? 'sm:col-span-2' : ''}`}>
+                <a
+                  href={c.href}
+                  target={c.href.startsWith('http') ? '_blank' : undefined}
+                  rel="noopener noreferrer"
+                  className="group flex items-center gap-4 px-6 py-4 transition-colors hover:bg-raised/60 md:px-10"
+                >
+                  <c.Icon size={18} className="shrink-0 text-muted" />
+                  <span className="min-w-0 flex-1">
+                    <span className="block text-sm font-medium">{c.label}</span>
+                    <span className="block truncate text-[13px] text-muted">{c.value}</span>
+                  </span>
+                  <ArrowUpRight size={15} className="shrink-0 text-faint transition-colors group-hover:text-accent" />
+                </a>
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
-    </section>
+    </Section>
   )
 }

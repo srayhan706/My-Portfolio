@@ -1,9 +1,16 @@
 {
   "about": {
-    "name": "Md Shariful Islam Rayhan",
-    "title": "Junior Software Engineer",
+    "name": "Sharif Rayhan",
+    "full_name": "Md Shariful Islam Rayhan",
+    "title": "Software Engineer",
+    "location": "Dhaka, Bangladesh",
+    "timezone": "UTC+6",
     "tagline": "Full-stack developer building scalable web applications with Spring Boot, FastAPI, React, and Next.js.",
-    "summary": "B.Sc. in Computer Science & Engineering from the University of Dhaka (CGPA 3.39/4). Currently working as a Junior Software Engineer at Dynamic Solution Innovators (DSi) in Dhaka. Experienced in REST API design, secure authentication (JWT, OAuth 2.0), modular backend architecture, and deploying services with Docker, Linux, and CI/CD."
+    "summary": [
+      "I’m a software engineer at Dynamic Solution Innovators (DSi) in Dhaka, where I build backend services with Java and Spring Boot for a US-based client.",
+      "I hold a B.Sc. in Computer Science and Engineering from the University of Dhaka. I enjoy designing clean REST APIs, getting authentication right with JWT and OAuth 2.0, automating repetitive work with Bash, and shipping services with Docker, Linux, and CI/CD.",
+      "Beyond day-to-day engineering, I’ve published research on long-video question answering, served as President of the CSEDU Students’ Club, and still enjoy competitive programming."
+    ]
   },
   "contact": {
     "email": "srayhan706@gmail.com",
@@ -12,14 +19,18 @@
     "linkedin": "https://www.linkedin.com/in/srayhan",
     "leetcode": "https://leetcode.com/u/rayhansharif/",
     "codeforces": "https://codeforces.com/profile/sharifrayhan",
-    "resume": "/mdsharifulisalmrayhan.pdf"
+    "resume": "/mdsharifulisalmrayhangp.pdf"
   },
   "experience": [
     {
-      "role": "Junior Software Engineer",
+      "role": "Software Engineer Level-I",
       "organization": "Dynamic Solution Innovators (DSi)",
       "location": "Dhaka, Bangladesh",
-      "period": "July 2026 – Present"
+      "period": "July 2026 – Present",
+      "highlights": [
+        "Contribute to backend development with Java and Spring Boot on a project for a US-based client.",
+        "Automated the generation of digital transaction statements for US customers using Bash scripting."
+      ]
     }
   ],
   "education": [
@@ -27,8 +38,8 @@
       "degree": "B.Sc. in Computer Science and Engineering",
       "institution": "University of Dhaka",
       "location": "Dhaka, Bangladesh",
-      "period": "Jan 2022 - Jan 2026",
-      "cgpa": "3.39/4"
+      "period": "Jan 2022 – Jan 2026",
+      "cgpa": "3.39/4.00"
     }
   ],
   "skills": {
@@ -42,8 +53,8 @@
       "Perl"
     ],
     "scripting_automation": [
-      "Advanced Bash Scripting",
-      "Advanced Perl Scripting"
+      "Bash Scripting",
+      "Perl Scripting"
     ],
     "frontend": [
       "React.js",
@@ -53,8 +64,12 @@
     ],
     "backend": [
       "Spring Boot",
+      "Spring Security",
       "FastAPI",
-      "Flask"
+      "Flask",
+      "REST APIs",
+      "JWT",
+      "OAuth 2.0"
     ],
     "databases": [
       "MySQL",
@@ -110,9 +125,9 @@
     },
     {
       "title": "CSEDU Department Website",
-      "description": "A collaborative project to develop the official website of the University of Dhaka’s CSE department, featuring user management, academic resources, announcements, and event scheduling.",
+      "description": "A collaborative project building the official website of the University of Dhaka’s CSE department, covering user management, academic resources, announcements, and event scheduling.",
       "highlights": [
-        "Designed and implemented REST APIs for meetings, events, and announcements modules.",
+        "Designed and implemented REST APIs for the meetings, events, and announcements modules.",
         "Developed the meetings, events, and announcements pages and integrated them with the backend APIs."
       ],
       "tech": [
@@ -127,9 +142,9 @@
       "title": "Marketplace Web Application",
       "description": "Flask-based backend system with REST APIs designed using a modular and scalable architecture for efficient data handling.",
       "highlights": [
-        "Designed and implemented RESTful APIs for core marketplace functionalities.",
-        "Structured the backend using a modular architecture to ensure scalability and maintainability.",
-        "Handled data processing and routing efficiently for seamless client-server communication."
+        "Designed and implemented RESTful APIs in Flask for core marketplace functionality.",
+        "Structured the backend with a modular architecture for scalability and maintainability.",
+        "Handled data processing and routing for client-server communication."
       ],
       "tech": [
         "Python",
@@ -170,5 +185,20 @@
       "Multimodal LLMs",
       "Video Understanding"
     ]
-  }
+  },
+  "leadership": [
+    {
+      "role": "President",
+      "organization": "CSEDU Students’ Club",
+      "institution": "University of Dhaka",
+      "location": "Dhaka, Bangladesh",
+      "period": "Jan 2025 – Dec 2025",
+      "description": "Led the students’ club of the Department of Computer Science and Engineering, University of Dhaka (CSEDU).",
+      "highlights": [
+        "Organized a 40-team Capture the Flag (CTF) cybersecurity competition for University of Dhaka students.",
+        "Organized the VisionX AI Hackathon, a joint event of CSEDU, US-Bangla, and the ICT Division, with 50 teams from universities across Bangladesh.",
+        "Organized Code Samurai, a two-day national hackathon with 50 teams from across the country, held jointly by CSEDU, BJIT, and Japan-based IT and business companies."
+      ]
+    }
+  ]
 }
